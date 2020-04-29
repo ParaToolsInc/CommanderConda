@@ -1,0 +1,32 @@
+name: Commanderconda
+version: 0.1.0
+company: "ParaTools, Inc."
+
+install_in_dependency_order: True
+
+channels:
+  - https://repo.anaconda.com/pkgs/main/
+  - https://conda.anaconda.org/conda-forge
+
+conda_default_channels:
+  - https://repo.anaconda.com/pkgs/main/
+
+specs:
+  - fasteners
+  - monotonic
+  - python 2.7*
+  - setuptools
+  - six
+  - termcolor
+#  - texttable
+#  - tinydb
+#  - unidecode
+  - wcwidth
+
+license_file: LICENSE.txt
+
+initialize_by_default: False
+
+register_python_default: False
+
+write_condarc: True
