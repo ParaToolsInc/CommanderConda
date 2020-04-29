@@ -1,4 +1,4 @@
-name: Commanderconda
+name: "commander-conda"
 version: 0.1.0
 company: "ParaTools, Inc."
 
@@ -12,6 +12,7 @@ conda_default_channels:
   - https://repo.anaconda.com/pkgs/main/
 
 specs:
+  - conda
   - fasteners
   - monotonic
   - python 2.7*
@@ -23,10 +24,10 @@ specs:
 #  - unidecode
   - wcwidth
 
-license_file: LICENSE.txt
-
 initialize_by_default: False
 
-register_python_default: False
+# installer_type: pkg    [osx]
 
-write_condarc: True
+license_file: LICENSE.txt
+
+register_python_default: False    [win]
