@@ -1,5 +1,10 @@
-name: "commander-conda"
-version: 0.1.0
+{% set version = os.environ.get("COMMANDERCONDA_VERSION", "4.8.3-0") %}
+{% set name = os.environ.get("COMMANDERCONDA_NAME", "CommanderConda2") %}
+
+name: {{ name }}
+version: {{ version }}
+
+
 company: "ParaTools, Inc."
 
 install_in_dependency_order: True
@@ -12,10 +17,14 @@ conda_default_channels:
   - https://repo.anaconda.com/pkgs/main/
 
 specs:
-  - conda
+  - conda {{ version.split("-")[0] }}
   - fasteners
+{% if name == "CommanderConda3" %}
+  - python 3.7.*
+{% elif name == "CommanderConda2" %}
   - monotonic
   - python 2.7*
+{% endif %}
   - setuptools
   - six
   - termcolor
@@ -28,6 +37,8 @@ initialize_by_default: False
 
 # installer_type: pkg    [osx]
 
-license_file: LICENSE.txt
+license_file: ../LICENSE
 
 register_python_default: False    [win]
+
+write_condarc: True
