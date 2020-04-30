@@ -54,10 +54,22 @@ jobs:
         id: get-files
         env:
           SHA256: ${{ hashFiles( steps.bcd.outputs.ccfile ) }}
+        shell: bash -l {0}
         run: |
-          echo "${SHA256}  ${CCFILE}" > "${CCFILE}.sha256"
-          if ! [[ "${{ matrix.os }}" == "windows-latest" ]]; then shasum -c "${CCFILE}.sha256" ; fi
+          echo "${SHA256}  ${CCFILE}" | tee "${CCFILE}.sha256"
+          if ! [[ "${{ matrix.os }}" == "windows-latest" ]]; then
+            if ! shasum -c "${CCFILE}.sha256" ; then
+              rm "${CCFILE}.sha256"
+              if [[ "${{ matrix.os }}" == "macos-latest" ]]; then
+                shasum -b -a 256 "${CCFILE}" | tee "${CCFILE}.sha256"
+              else
+                sha256sum -b "${CCFILE}" | tee "${CCFILE}.sha256"
+              fi
+            fi
+            shasum -c -w "${CCFILE}.sha256"
+          fi
           zip -v "${CCFILE%.*}.zip" "${CCFILE}" "${CCFILE}.sha256"
+          ls -Gla
           echo "::set-output name=asset::${CCFILE%.*}.zip"
       - name: Test distribution
         if: contains( matrix.os, 'ubuntu' ) || contains( matrix.os, 'macos' )
