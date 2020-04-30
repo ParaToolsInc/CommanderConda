@@ -17,10 +17,10 @@ conda_default_channels:
 specs:
   - conda {{ version.split("-")[0] }}
   - fasteners
+  - monotonic
 {% if name == "CommanderConda3" %}
   - python 3.7.*
 {% elif name == "CommanderConda2" %}
-  - monotonic
   - python 2.7*
 {% endif %}
   - setuptools
@@ -30,6 +30,9 @@ specs:
 #  - tinydb
 #  - unidecode
   - wcwidth
+
+exclude:
+  - cffi    [osx]
 
 keep_pkgs: True
 

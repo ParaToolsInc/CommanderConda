@@ -48,16 +48,18 @@ jobs:
           du -h "${CCFILE}"
           echo "::set-env name=CCFILE::${CCFILE}"
           echo "::set-output name=ccfile::${CCFILE}"
-          echo "::set-env name=SHA256::${{ hashFiles( 'CommanderConda*-*' ) }}"
-          echo "::set-output name=${{ hashFiles( 'CommanderConda*-*' ) }}"
+          echo "::set-env name=SHA256::${{ hashFiles( '**/CommanderConda*-*' ) }}"
+          echo "::set-output name=${{ hashFiles( '**/CommanderConda*-*' ) }}"
       - name: Test distribution
         if: contains( matrix.os, 'ubuntu' ) || contains( matrix.os, 'macos' )
+        env:
+          SHA256: ${{ hashFiles( steps.bcd.outputs.ccfile ) }}
         shell: bash
         run: |
           ./${CCFILE} -h || true
           ./${CCFILE} -b -f
           ./${CCFILE} -b -f -t || true
-          ./${CCFILE} -b -u -t || true
+          ./${CCFILE} -b -u -t
       - name: upload
         if: always()
         uses: actions/upload-artifact@v1
