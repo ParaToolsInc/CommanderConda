@@ -27,6 +27,8 @@ jobs:
       - name: Conda info
         shell: bash -l {0}
         run: |
+          echo "GITHUB_EVENT_NAME = ${GITHUB_EVENT_NAME}"
+          echo "GITHUB_REF = ${GITHUB_REF}"
           pip install git+git://github.com/conda/constructor@5c9539a95ed7eafb#egg=constructor --force --no-deps
           conda info
           conda list
@@ -43,13 +45,20 @@ jobs:
           constructor --verbose --test || true
           constructor --verbose --dry-run ./CommanderConda || true
           constructor --verbose ./CommanderConda
-          ls -la
+          ls -Gla
           export CCFILE="$(echo CommanderConda*-*)"
           du -h "${CCFILE}"
           echo "::set-env name=CCFILE::${CCFILE}"
           echo "::set-output name=ccfile::${CCFILE}"
-          echo "::set-env name=SHA256::${{ hashFiles( '**/CommanderConda*-*' ) }}"
-          echo "::set-output name=${{ hashFiles( '**/CommanderConda*-*' ) }}"
+      - name: Create checksum file
+        id: get-files
+        env:
+          SHA256: ${{ hashFiles( steps.bcd.outputs.ccfile ) }}
+        run: |
+          echo "${SHA256}  ${CCFILE}" > "${CCFILE}.sha256"
+          if ! [[ "${{ matrix.os }}" == "windows-latest" ]]; then shasum -c "${CCFILE}.sha256" ; fi
+          zip -v "${CCFILE%.*}.zip" "${CCFILE}" "${CCFILE}.sha256"
+          echo "::set-output name=asset::${CCFILE%.*}.zip"
       - name: Test distribution
         if: contains( matrix.os, 'ubuntu' ) || contains( matrix.os, 'macos' )
         env:
@@ -59,10 +68,10 @@ jobs:
           ./${CCFILE} -h || true
           ./${CCFILE} -b -f
           ./${CCFILE} -b -f -t || true
-          ./${CCFILE} -b -u -t
+          if ! [[ "${GITHUB_REF## }" =~ "^refs/tags/" ]]; then ./${CCFILE} -b -u -t ; fi
       - name: upload
         if: always()
         uses: actions/upload-artifact@v1
         with:
-          name: ${{ steps.bcd.outputs.ccfile }}
-          path: ${{ steps.bcd.outputs.ccfile }}
+          name: ${{ matrix.os }}-${{ matrix.python-version }}-asset
+          path: ${{ steps.get-files.outputs.asset }}

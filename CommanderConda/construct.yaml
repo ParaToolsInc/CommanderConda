@@ -1,5 +1,6 @@
-{% set version = os.environ.get("COMMANDERCONDA_VERSION", "4.8.3-0") %}
 {% set name = os.environ.get("COMMANDERCONDA_NAME", "CommanderConda2") %}
+{% set version = os.environ.get("COMMANDERCONDA_VERSION", "4.8.3-0") %}
+
 
 name: {{ name }}
 version: {{ version }}
@@ -31,10 +32,10 @@ specs:
 #  - unidecode
   - wcwidth
 
-exclude:
-  - cffi    [osx]
-
+# Don't bloat tagged (released) binary distributions with unneeded stuff
+{% if not os.environ.get("GITHUB_REF", "")[0:10] == "refs/tags/" %}
 keep_pkgs: True
+{% endif %}
 
 initialize_by_default: False
 
