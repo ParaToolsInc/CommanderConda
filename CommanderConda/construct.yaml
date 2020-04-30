@@ -7,8 +7,6 @@ version: {{ version }}
 
 company: "ParaTools, Inc."
 
-install_in_dependency_order: True
-
 channels:
   - https://repo.anaconda.com/pkgs/main/
   - https://conda.anaconda.org/conda-forge
@@ -33,7 +31,11 @@ specs:
 #  - unidecode
   - wcwidth
 
+keep_pkgs: True
+
 initialize_by_default: False
+
+install_in_dependency_order: True
 
 # installer_type: pkg    [osx]
 
