@@ -68,16 +68,21 @@ jobs:
           ./${CCFILE} -h || true
           ./${CCFILE} -b -f
           export ALLOW_FAILURE=false
-          if [[ ${{ matrix.os }} =~ macos && ${{ matrix.python-version}} == 2.7 ]]; then
-            export ALLOW_FAILURE=true
-          fi
-          if ! [[ "${GITHUB_REF## }" =~ "^refs/tags/" ]]; then
-            ./${CCFILE} -b -f -t || ${ALLOW_FAILURE}
-            ./${CCFILE} -b -u -t || ${ALLOW_FAILURE}
-          fi
+          if [[ ${{ matrix.os }} =~ macos && ${{ matrix.python-version}} == 2.7 ]] export ALLOW_FAILURE=true
+          if [[ "${GITHUB_REF## }" =~ "^refs/tags/" ]] export ALLOW_FAILURE=true
+          ./${CCFILE} -b -f -t || ${ALLOW_FAILURE} || [[ ${{ matrix.os }} =~ ubuntu && ${{ matrix.python-version}} == 3.7 ]]
+          ./${CCFILE} -b -u -t || ${ALLOW_FAILURE}
+
       - name: upload
         if: always()
         uses: actions/upload-artifact@v2
         with:
-          name: ${{ matrix.os }}-${{ matrix.python-version }}-asset
           path: ${{ steps.bcd.outputs.ccfile }}*
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - uses: actions/download-artifact@v2
+      - name: Show artifacts
+        run: ls -Gla
