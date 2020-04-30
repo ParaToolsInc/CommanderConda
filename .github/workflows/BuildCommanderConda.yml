@@ -52,7 +52,8 @@ jobs:
           echo "::set-env name=SHA256::${SHA256}"
           echo "::set-output name=sha256::${SHA256}"
       - name: Test distribution
-        shell: bash -l {0}
+        if: contains( matrix.os, 'ubuntu' ) || contains( matrix.os, 'macos' )
+        shell: bash
         run: |
           ./${CCFILE} -h || true
           ./${CCFILE} -b -f
