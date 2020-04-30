@@ -58,3 +58,8 @@ jobs:
           ./${CCFILE} -b -f
           ./${CCFILE} -b -f -t || true
           ./${CCFILE} -b -u -t || true
+      - name: upload
+        uses: actions/upload-artifact@v1
+        with:
+          name: ${{ env["CCFILE"] }}
+          path: ${{ env["CCFILE"] }}
