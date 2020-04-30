@@ -54,7 +54,7 @@ jobs:
       - name: Test distribution
         shell: bash -l {0}
         run: |
-          ./${CCFILE} -h
+          ./${CCFILE} -h || true
           ./${CCFILE} -b -f
           ./${CCFILE} -b -f -t || true
           ./${CCFILE} -b -u -t || true
