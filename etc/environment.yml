@@ -1,3 +1,7 @@
 name: constructor-env
+channels:
+  - defaults
+  - conda-forge
 dependencies:
-  - constructor
+  - constructor>=3.0.1
+  - jinja2
