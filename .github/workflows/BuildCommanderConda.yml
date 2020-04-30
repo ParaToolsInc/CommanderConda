@@ -67,8 +67,14 @@ jobs:
         run: |
           ./${CCFILE} -h || true
           ./${CCFILE} -b -f
-          ./${CCFILE} -b -f -t || true
-          if ! [[ "${GITHUB_REF## }" =~ "^refs/tags/" ]]; then ./${CCFILE} -b -u -t ; fi
+          export ALLOW_FAILURE=false
+          if [[ ${{ matrix.os }} =~ macos && ${{ matrix.python-version}} == 2.7 ]]; then
+            export ALLOW_FAILURE=true
+          fi
+          if ! [[ "${GITHUB_REF## }" =~ "^refs/tags/" ]]; then
+            ./${CCFILE} -b -f -t || ${ALLOW_FAILURE}
+            ./${CCFILE} -b -u -t || ${ALLOW_FAILURE}
+          fi
       - name: upload
         if: always()
         uses: actions/upload-artifact@v2
