@@ -36,9 +36,25 @@ jobs:
           export PYVER=${{ matrix.python-version }}
           echo "::set-env name=COMMANDERCONDA_NAME::CommanderConda${PYVER%%.*}"
       - name: Build conda distribution
+        id: bcd
         shell: bash -l {0}
         run: |
           echo "COMMANDERCONDA_NAME = ${COMMANDER_CONDA}"
           constructor --verbose --test || true
           constructor --verbose --dry-run ./CommanderConda || true
           constructor --verbose ./CommanderConda
+          ls -la
+          export CCFILE="$(echo CommanderConda*-*)"
+          du -h "${CCFILE}"
+          echo "::set-env name=CCFILE::${CCFILE}"
+          echo "::set-output name=ccfile::${CCFILE}"
+          export SHA256=${{ hashFiles( 'CommanderConda*-*' ) }}
+          echo "::set-env name=SHA256::${SHA256}"
+          echo "::set-output name=sha256::${SHA256}"
+      - name: Test distribution
+        shell: bash -l {0}
+        run: |
+          ./${CCFILE} -h
+          ./${CCFILE} -b -f
+          ./${CCFILE} -b -f -t || true
+          ./${CCFILE} -b -u -t || true
