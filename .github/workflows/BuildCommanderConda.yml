@@ -68,8 +68,8 @@ jobs:
           ./${CCFILE} -h || true
           ./${CCFILE} -b -f
           export ALLOW_FAILURE=false
-          if [[ ${{ matrix.os }} =~ macos && ${{ matrix.python-version}} == 2.7 ]] export ALLOW_FAILURE=true
-          if [[ "${GITHUB_REF## }" =~ "^refs/tags/" ]] export ALLOW_FAILURE=true
+          if [[ ${{ matrix.os }} =~ macos && ${{ matrix.python-version}} == 2.7 ]]; then export ALLOW_FAILURE=true; fi
+          if [[ "${GITHUB_REF## }" =~ "^refs/tags/" ]]; then export ALLOW_FAILURE=true; fi
           ./${CCFILE} -b -f -t || ${ALLOW_FAILURE} || [[ ${{ matrix.os }} =~ ubuntu && ${{ matrix.python-version}} == 3.7 ]]
           ./${CCFILE} -b -u -t || ${ALLOW_FAILURE}
 
