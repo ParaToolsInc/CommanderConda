@@ -85,4 +85,10 @@ jobs:
     steps:
       - uses: actions/download-artifact@v2
       - name: Show artifacts
-        run: ls -Gla
+        run: ls -RGla
+      - name: Verify SHA256 Checksums
+        working-directory: artifact
+        run: |
+          for sum in *.sha256; do
+            shasum -w -c "${sum}"
+          done
