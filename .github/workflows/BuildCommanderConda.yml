@@ -66,8 +66,8 @@ jobs:
           export SHA256="$(cut -f 1 -d ' ' < "${CCFILE}.sha256")"
           echo "::set-env name=SHA256::${SHA256}"
           echo "::set-output name=sha256::${SHA256}"
-          export SHA_FILE=($(cat "${CCFILE}.sha256"))
-          echo "::set-output name=${{ matrix.os }}-${PYVER%%.*}::${SHA_FILE[0]}"
+          export SHA_FILE="$(cat "${CCFILE}.sha256")"
+          echo "::set-output name=${{ matrix.os }}-${PYVER%%.*}::${SHA_FILE}"
       - name: Test distribution
         if: contains( matrix.os, 'ubuntu' ) || contains( matrix.os, 'macos' )
         env:
