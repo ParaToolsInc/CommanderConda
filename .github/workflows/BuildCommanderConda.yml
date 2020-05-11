@@ -19,8 +19,12 @@ jobs:
         os: ['ubuntu-latest', 'macos-latest', 'windows-latest']
         python-version: ['3.7', '2.7']
     outputs:
-      checksum-${{ strategy.job-index }}: ${{ steps.bcd.outputs.shasum-w-file }}
-      asset-count: ${{ strategy.job-count }}
+      checksum1: ${{ steps.bcd.outputs.ubunutu-latest-3 }}
+      checksum2: ${{ steps.bcd.outputs.ubunutu-latest-2 }}
+      checksum3: ${{ steps.bcd.outputs.macos-latest-3 }}
+      checksum4: ${{ steps.bcd.outputs.macos-latest-2 }}
+      checksum5: ${{ steps.bcd.outputs.windows-latest-3 }}
+      checksum6: ${{ steps.bcd.outputs.windows-latest-2 }}
     steps:
       - uses: actions/checkout@v2
       - uses: goanpeca/setup-miniconda@v1
@@ -68,8 +72,8 @@ jobs:
           echo "::set-output name=sha256::${SHA256}"
           export SHA_FILE="$(cat "${CCFILE}.sha256")"
           echo "SHA_FILE=${SHA_FILE}"
-          echo "::set-output name=shasum-w-file::${SHA_FILE}"
-          echo "bcd.outputs.shasum-w-file=${SHA_FILE}"
+          echo "::set-output name=${{ matrix.os }}-${{ steps.se.outputs.maj-py-ver }}::${SHA_FILE}"
+          echo "bcd.outputs.${{ matrix.os }}-${{ steps.se.outputs.maj-py-ver }}=${SHA_FILE}"
       - name: Test distribution
         if: contains( matrix.os, 'ubuntu' ) || contains( matrix.os, 'macos' )
         env:
@@ -135,11 +139,11 @@ jobs:
         run: echo "$JOB_CONTEXT"
       - name: Check passed SHA256 checksums
         run: |
-          echo "${{ needs.build.ouputs.checksum-0 }}" >> sha256-checksums.txt
-          echo "${{ needs.build.ouputs.checksum-1 }}" >> sha256-checksums.txt
-          echo "${{ needs.build.ouputs.checksum-2 }}" >> sha256-checksums.txt
-          echo "${{ needs.build.ouputs.checksum-3 }}" >> sha256-checksums.txt
-          echo "${{ needs.build.ouputs.checksum-4 }}" >> sha256-checksums.txt
-          echo "${{ needs.build.ouputs.checksum-5 }}" >> sha256-checksums.txt
+          echo "${{ needs.build.ouputs.checksum1 }}" >> sha256-checksums.txt
+          echo "${{ needs.build.ouputs.checksum2 }}" >> sha256-checksums.txt
+          echo "${{ needs.build.ouputs.checksum3 }}" >> sha256-checksums.txt
+          echo "${{ needs.build.ouputs.checksum4 }}" >> sha256-checksums.txt
+          echo "${{ needs.build.ouputs.checksum5 }}" >> sha256-checksums.txt
+          echo "${{ needs.build.ouputs.checksum6 }}" >> sha256-checksums.txt
           cat sha256-checksums.txt
           shasum -c sha256-checksums.txt
