@@ -140,11 +140,11 @@ jobs:
         run: echo "$JOB_CONTEXT"
       - name: Check passed SHA256 checksums
         run: |
-          echo ${{ needs.build.ouputs.checksum1 }} >> sha256-checksums.txt
-          echo ${{ needs.build.ouputs.checksum2 }} >> sha256-checksums.txt
-          echo ${{ needs.build.ouputs.checksum3 }} >> sha256-checksums.txt
-          echo ${{ needs.build.ouputs.checksum4 }} >> sha256-checksums.txt
-          echo ${{ needs.build.ouputs.checksum5 }} >> sha256-checksums.txt
-          echo ${{ needs.build.ouputs.checksum6 }} >> sha256-checksums.txt
+          echo ${{ needs.build.outputs.checksum1 }} >> sha256-checksums.txt
+          echo ${{ needs.build.outputs.checksum2 }} >> sha256-checksums.txt
+          echo ${{ needs.build.outputs.checksum3 }} >> sha256-checksums.txt
+          echo ${{ needs.build.outputs.checksum4 }} >> sha256-checksums.txt
+          echo ${{ needs.build.outputs.checksum5 }} >> sha256-checksums.txt
+          echo ${{ needs.build.outputs.checksum6 }} >> sha256-checksums.txt
           cat sha256-checksums.txt
           shasum -c sha256-checksums.txt
