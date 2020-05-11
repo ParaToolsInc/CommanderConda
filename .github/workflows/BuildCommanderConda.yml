@@ -42,9 +42,13 @@ jobs:
           conda info
           conda list
       - name: Set Environment
+        id: se
         run: |
           export PYVER=${{ matrix.python-version }}
+          export MAJ_PY_VER=${PYVER%%.*}
           echo "::set-env name=COMMANDERCONDA_NAME::CommanderConda${PYVER%%.*}"
+          echo "::set-env name=MAJ_PY_VER::${MAJ_PY_VER}"
+          echo "::set-output name=maj-py-ver::${MAJ_PY_VER}"
       - name: Build conda distribution
         id: bcd
         run: |
@@ -68,8 +72,8 @@ jobs:
           echo "::set-output name=sha256::${SHA256}"
           export SHA_FILE="$(cat "${CCFILE}.sha256")"
           echo "SHA_FILE=${SHA_FILE}"
-          echo "::set-output name=${{ matrix.os }}-${PYVER%%.*}::${SHA_FILE}"
-          echo "bcd.outputs.${{ matrix.os }}-${PYBER%%.*}=${SHA_FILE}"
+          echo "::set-output name=${{ matrix.os }}-${{ steps.se.outputs.maj-py-ver }}::${SHA_FILE}"
+          echo "bcd.outputs.${{ matrix.os }}-${{ steps.se.outputs.maj-py-ver }}=${SHA_FILE}"
       - name: Test distribution
         if: contains( matrix.os, 'ubuntu' ) || contains( matrix.os, 'macos' )
         env:
