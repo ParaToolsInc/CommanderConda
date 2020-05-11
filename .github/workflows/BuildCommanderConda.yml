@@ -67,7 +67,9 @@ jobs:
           echo "::set-env name=SHA256::${SHA256}"
           echo "::set-output name=sha256::${SHA256}"
           export SHA_FILE="$(cat "${CCFILE}.sha256")"
+          echo "SHA_FILE=${SHA_FILE}"
           echo "::set-output name=${{ matrix.os }}-${PYVER%%.*}::${SHA_FILE}"
+          echo "bcd.outputs.${{ matrix.os }}-${PYBER%%.*}=${SHA_FILE}"
       - name: Test distribution
         if: contains( matrix.os, 'ubuntu' ) || contains( matrix.os, 'macos' )
         env:
@@ -87,6 +89,22 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           path: ${{ steps.bcd.outputs.ccfile }}*
+      - name: Dump steps context
+        env:
+          STEPS_CONTEXT: ${{ toJson(steps) }}
+        run: echo "$STEPS_CONTEXT"
+      - name: Dump job context
+        env:
+          JOB_CONTEXT: ${{ toJson(job) }}
+        run: echo "$JOB_CONTEXT"
+      - name: Dump strategy context
+        env:
+          STRATEGY_CONTEXT: ${{ toJson(strategy) }}
+        run: echo "$STRATEGY_CONTEXT"
+      - name: Dump matrix context
+        env:
+          MATRIX_CONTEXT: ${{ toJson(matrix) }}
+        run: echo "$MATRIX_CONTEXT"
 
   deploy:
     runs-on: ubuntu-latest
@@ -103,10 +121,18 @@ jobs:
           for sum in *.sha256; do
             shasum -w -c "${sum}"
           done
-      - name: Dump outputs
+      - name: Dump steps context
         env:
-          JOB_OUTPUTS: ${{ toJson(needs.build.outputs) }}
+          NEEDS_CONTEXT: ${{ toJson(steps) }}
+        run: echo "$NEEDS_CONTEXT"
+      - name: Dump needs
+        env:
+          JOB_OUTPUTS: ${{ toJson(needs) }}
         run: echo "${JOB_OUTPUTS}"
+      - name: Dump job context
+        env:
+          JOB_CONTEXT: ${{ toJson(job) }}
+        run: echo "$JOB_CONTEXT"
       - name: Check passed SHA256 checksums
         run: |
           echo "${{ needs.build.ouputs.checksum1 }}" >> sha256-checksums.txt
