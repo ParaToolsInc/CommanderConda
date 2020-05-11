@@ -106,6 +106,7 @@ jobs:
           for sum in *.sha256; do
             shasum -w -c "${sum}"
           done
+          rm *.sha256
       - name: Check passed SHA256 checksums
         run: |
           echo "${{ needs.build.outputs.checksum1 }}" >> sha256-checksums.txt
@@ -116,3 +117,11 @@ jobs:
           echo "${{ needs.build.outputs.checksum6 }}" >> sha256-checksums.txt
           cat sha256-checksums.txt
           sha256sum -w -c sha256-checksums.txt
+
+      - name: Release
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: softprops/action-gh-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          files: 'artifact/*'
