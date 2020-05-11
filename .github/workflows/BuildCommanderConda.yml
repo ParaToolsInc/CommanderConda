@@ -19,7 +19,12 @@ jobs:
         os: ['ubuntu-latest', 'macos-latest', 'windows-latest']
         python-version: ['3.7', '2.7']
     outputs:
-      checksum: ${{ steps.bcd.outputs.sha-file }}
+      checksum1: ${{ steps.bcd.outputs.ubunutu-latest-3 }}
+      checksum2: ${{ steps.bcd.outputs.ubunutu-latest-2 }}
+      checksum3: ${{ steps.bcd.outputs.macos-latest-3 }}
+      checksum4: ${{ steps.bcd.outputs.macos-latest-2 }}
+      checksum5: ${{ steps.bcd.outputs.windows-latest-3 }}
+      checksum6: ${{ steps.bcd.outputs.windows-latest-2 }}
     steps:
       - uses: actions/checkout@v2
       - uses: goanpeca/setup-miniconda@v1
@@ -62,7 +67,7 @@ jobs:
           echo "::set-env name=SHA256::${SHA256}"
           echo "::set-output name=sha256::${SHA256}"
           export SHA_FILE=($(cat "${CCFILE}.sha256"))
-          echo "::set-output name=sha-file::${SHA_FILE[0]}"
+          echo "::set-output name=${{ matrix.os }}-${PYVER%%.*}::${SHA_FILE[0]}"
       - name: Test distribution
         if: contains( matrix.os, 'ubuntu' ) || contains( matrix.os, 'macos' )
         env:
@@ -102,3 +107,13 @@ jobs:
         env:
           JOB_OUTPUTS: ${{ toJson(needs.build.outputs) }}
         run: echo "${JOB_OUTPUTS}"
+      - name: Check passed SHA256 checksums
+        run: |
+          echo "${{ needs.build.ouputs.checksum1 }}" >> sha256-checksums.txt
+          echo "${{ needs.build.ouputs.checksum2 }}" >> sha256-checksums.txt
+          echo "${{ needs.build.ouputs.checksum3 }}" >> sha256-checksums.txt
+          echo "${{ needs.build.ouputs.checksum4 }}" >> sha256-checksums.txt
+          echo "${{ needs.build.ouputs.checksum5 }}" >> sha256-checksums.txt
+          echo "${{ needs.build.ouputs.checksum6 }}" >> sha256-checksums.txt
+          cat sha256-checksums.txt
+          shasum -c sha256-checksums.txt
