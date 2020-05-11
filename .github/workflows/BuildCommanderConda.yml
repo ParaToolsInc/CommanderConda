@@ -19,7 +19,7 @@ jobs:
         os: ['ubuntu-latest', 'macos-latest', 'windows-latest']
         python-version: ['3.7', '2.7']
     outputs:
-      ${{ matrix.os }}-py${{ matrix.python-version }}-checksum: ${{ steps.bcd.outputs.sha-file }}
+      checksum: ${{ steps.bcd.outputs.sha-file }}
     steps:
       - uses: actions/checkout@v2
       - uses: goanpeca/setup-miniconda@v1
@@ -86,13 +86,19 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     needs: build
+    defaults:
+      run:
+        working-directory: artifact
     steps:
       - uses: actions/download-artifact@v2
       - name: Show artifacts
         run: ls -RGla
       - name: Verify SHA256 Checksums
-        working-directory: artifact
         run: |
           for sum in *.sha256; do
             shasum -w -c "${sum}"
           done
+      - name: Dump outputs
+        env:
+          JOB_OUTPUTS: ${{ toJson(needs.build.outputs) }}
+        run: echo "${JOB_OUTPUTS}"
