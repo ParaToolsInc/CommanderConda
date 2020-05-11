@@ -43,13 +43,9 @@ jobs:
           conda info
           conda list
       - name: Set Environment
-        id: se
         run: |
           export PYVER=${{ matrix.python-version }}
-          export MAJ_PY_VER=${PYVER%%.*}
           echo "::set-env name=COMMANDERCONDA_NAME::CommanderConda${PYVER%%.*}"
-          echo "::set-env name=MAJ_PY_VER::${MAJ_PY_VER}"
-          echo "::set-output name=maj-py-ver::${MAJ_PY_VER}"
       - name: Build conda distribution
         id: bcd
         run: |
@@ -94,22 +90,6 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           path: ${{ steps.bcd.outputs.ccfile }}*
-      - name: Dump steps context
-        env:
-          STEPS_CONTEXT: ${{ toJson(steps) }}
-        run: echo "$STEPS_CONTEXT"
-      - name: Dump job context
-        env:
-          JOB_CONTEXT: ${{ toJson(job) }}
-        run: echo "$JOB_CONTEXT"
-      - name: Dump strategy context
-        env:
-          STRATEGY_CONTEXT: ${{ toJson(strategy) }}
-        run: echo "$STRATEGY_CONTEXT"
-      - name: Dump matrix context
-        env:
-          MATRIX_CONTEXT: ${{ toJson(matrix) }}
-        run: echo "$MATRIX_CONTEXT"
 
   deploy:
     runs-on: ubuntu-latest
@@ -126,25 +106,13 @@ jobs:
           for sum in *.sha256; do
             shasum -w -c "${sum}"
           done
-      - name: Dump steps context
-        env:
-          NEEDS_CONTEXT: ${{ toJson(steps) }}
-        run: echo "$NEEDS_CONTEXT"
-      - name: Dump needs
-        env:
-          JOB_OUTPUTS: ${{ toJson(needs) }}
-        run: echo "${JOB_OUTPUTS}"
-      - name: Dump job context
-        env:
-          JOB_CONTEXT: ${{ toJson(job) }}
-        run: echo "$JOB_CONTEXT"
       - name: Check passed SHA256 checksums
         run: |
-          echo ${{ needs.build.outputs.checksum1 }} >> sha256-checksums.txt
-          echo ${{ needs.build.outputs.checksum2 }} >> sha256-checksums.txt
-          echo ${{ needs.build.outputs.checksum3 }} >> sha256-checksums.txt
-          echo ${{ needs.build.outputs.checksum4 }} >> sha256-checksums.txt
-          echo ${{ needs.build.outputs.checksum5 }} >> sha256-checksums.txt
-          echo ${{ needs.build.outputs.checksum6 }} >> sha256-checksums.txt
+          echo "${{ needs.build.outputs.checksum1 }}" >> sha256-checksums.txt
+          echo "${{ needs.build.outputs.checksum2 }}" >> sha256-checksums.txt
+          echo "${{ needs.build.outputs.checksum3 }}" >> sha256-checksums.txt
+          echo "${{ needs.build.outputs.checksum4 }}" >> sha256-checksums.txt
+          echo "${{ needs.build.outputs.checksum5 }}" >> sha256-checksums.txt
+          echo "${{ needs.build.outputs.checksum6 }}" >> sha256-checksums.txt
           cat sha256-checksums.txt
-          shasum -c sha256-checksums.txt
+          sha256sum -w -c sha256-checksums.txt
