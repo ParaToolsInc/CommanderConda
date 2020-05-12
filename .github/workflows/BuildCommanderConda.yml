@@ -94,10 +94,12 @@ jobs:
           path: ${{ steps.bcd.outputs.ccfile }}*
 
   deploy:
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
     needs: build
     steps:
       - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
       - uses: actions/download-artifact@v2
       - name: Show artifacts
         working-directory: artifact
@@ -112,20 +114,20 @@ jobs:
       - name: Check passed SHA256 checksums
         working-directory: artifact
         run: |
-          echo -e "${{ join(needs.build.outputs.*, '\n') }}" > sha256-checksums.txt
+          printf "${{ join(needs.build.outputs.*, '\n') }}" > sha256-checksums.txt
           cat sha256-checksums.txt
-          sha256sum -w -c sha256-checksums.txt
+          shasum -w -c sha256-checksums.txt
       - name: Show ref
         run: |
-          git fetch --prune --depth=1 --all
-          echo "GITHUB_REF: ${GITHUB_REF#refs/tags/}"
+          git fetch --prune --unshallow --all
+          echo "GITHUB_REF: ${GITHUB_REF}"
 
       - name: Get notes from tag
         if: startsWith(github.ref, 'refs/tags/')
         run: |
           echo "GITHUB_REF: ${GITHUB_REF}"
           git for-each-ref --format='%(content)' "${GITHUB_REF}" | sed '/BEGIN PGP SIGNATURE/,/END PGP SIGNATURE/d' | tee release-notes.txt
-          echo -e '\n---\n' >> release-notes.txt
+          printf '\n---\n' >> release-notes.txt
           git for-each-ref --format='Tagged: %(taggername) on %(taggerdate:rfc2822)' "${GITHUB_REF}" | tee -a release-notes.txt
           git for-each-ref --format='Commit: %(objectname)' "${GITHUB_REF}" | tee -a release-notes.txt
           cat release-notes.txt
