@@ -115,10 +115,18 @@ jobs:
           echo -e "${{ join(needs.build.outputs.*, '\n') }}" > sha256-checksums.txt
           cat sha256-checksums.txt
           sha256sum -w -c sha256-checksums.txt
+      - name: Show ref
+        run: |
+          git fetch --prune --unshallow --depth=1 --all
+          echo "GITHUB_REF: ${GITHUB_REF#refs/tags/}"
 
       - name: Get notes from tag
         if: startsWith(github.ref, 'refs/tags/')
-        run: git cat-file -p ${GITHUB_REF#refs/tags/} | tail -n +6 | tee release-notes.txt
+        run: |
+          echo "GITHUB_REF: ${GITHUB_REF#refs/tags/}"
+          git cat-file -p ${GITHUB_REF#refs/tags/}
+          git cat-file -p ${GITHUB_REF#refs/tags/} | sed -n '/^ *$/,/BEGIN PGP SIGNATURE/p;/BEGIN PGP SIGNATURE/q' | sed '1d;/BEGIN PGP SIGNATURE/d' > release-notes.txt
+          cat release-notes.txt
       - name: Release
         if: startsWith(github.ref, 'refs/tags/')
         uses: softprops/action-gh-release@v1
