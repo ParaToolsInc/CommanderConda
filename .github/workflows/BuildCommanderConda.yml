@@ -119,12 +119,14 @@ jobs:
           shasum -w -c sha256-checksums.txt
       - name: Show ref
         run: |
-          git fetch --prune --unshallow --all
+          git fetch --prune origin +refs/heads/*:refs/remotes/origin/*
+          git fetch origin +refs/tags/*:refs/tags/*
+          git fetch --all --tags
           echo "GITHUB_REF: ${GITHUB_REF}"
       - name: Upgrade Git
         run: |
           git --version
-          sudo apt-get install -yy -q python-software-properties software-properties-common
+          sudo apt-get install -yy -q software-properties-common
           sudo add-apt-repository ppa:git-core/ppa -y
           sudo apt-get update
           sudo apt-get install git -y
