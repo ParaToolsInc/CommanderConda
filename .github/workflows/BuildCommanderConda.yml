@@ -117,7 +117,7 @@ jobs:
           sha256sum -w -c sha256-checksums.txt
       - name: Show ref
         run: |
-          git fetch --prune --unshallow --depth=1 --all
+          git fetch --prune --depth=1 --all
           echo "GITHUB_REF: ${GITHUB_REF#refs/tags/}"
 
       - name: Get notes from tag
