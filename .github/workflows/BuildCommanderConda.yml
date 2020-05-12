@@ -123,9 +123,11 @@ jobs:
       - name: Get notes from tag
         if: startsWith(github.ref, 'refs/tags/')
         run: |
-          echo "GITHUB_REF: ${GITHUB_REF#refs/tags/}"
-          git cat-file -p ${GITHUB_REF#refs/tags/}
-          git cat-file -p ${GITHUB_REF#refs/tags/} | sed -n '/^ *$/,/BEGIN PGP SIGNATURE/p;/BEGIN PGP SIGNATURE/q' | sed '1d;/BEGIN PGP SIGNATURE/d' > release-notes.txt
+          echo "GITHUB_REF: ${GITHUB_REF}"
+          git for-each-ref --format='%(content)' "${GITHUB_REF}" | sed '/BEGIN PGP SIGNATURE/,/END PGP SIGNATURE/d' | tee release-notes.txt
+          echo -e '\n---\n' >> release-notes.txt
+          git for-each-ref --format='Tagged: %(taggername) on %(taggerdate:rfc2822)' "${GITHUB_REF}" | tee -a release-notes.txt
+          git for-each-ref --format='Commit: %(objectname)' "${GITHUB_REF}" | tee -a release-notes.txt
           cat release-notes.txt
       - name: Release
         if: startsWith(github.ref, 'refs/tags/')
