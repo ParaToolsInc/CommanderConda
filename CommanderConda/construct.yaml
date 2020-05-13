@@ -10,13 +10,14 @@ company: "ParaTools, Inc."
 
 channels:
   - https://conda.anaconda.org/conda-forge
+  - https://repo.anaconda.com/pkgs/main
 
 conda_default_channels:
-  - https://repo.anaconda.com/pkgs/main/
+  - https://conda.anaconda.org/conda-forge
+  - https://repo.anaconda.com/pkgs/main
 
 specs:
   - conda {{ version.split("-")[0] }}
-  - conda-build
   - fasteners
   - monotonic
 {% if name == "CommanderConda3" %}

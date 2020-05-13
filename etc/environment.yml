@@ -1,6 +1,7 @@
 name: constructor-env
 channels:
   - conda-forge
+  - defaults
 dependencies:
   - bzip2
   - conda
