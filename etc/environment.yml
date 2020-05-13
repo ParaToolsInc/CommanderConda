@@ -1,9 +1,11 @@
 name: constructor-env
 channels:
-  - defaults
   - conda-forge
 dependencies:
+  - bzip2
+  - conda
   - conda-build
   - constructor>=3.0.1
   - jinja2
   - openssl
+  - pip
