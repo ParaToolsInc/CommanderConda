@@ -18,7 +18,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: ['ubuntu-latest', 'macos-latest', 'windows-latest']
+        os: ['ubuntu-16.04', 'macos-latest', 'windows-latest']
         python-version: ['3.7', '2.7']
     outputs:
       checksum1: ${{ steps.bcd.outputs.out-0 }}
@@ -83,7 +83,6 @@ jobs:
           export ALLOW_FAILURE=false
           if [[ ${{ matrix.os }} =~ macos && ${{ matrix.python-version}} == 2.7 ]]; then export ALLOW_FAILURE=true; fi
           echo "GITHUB_REF=$GITHUB_REF"
-          if [[ "${GITHUB_REF}" =~ refs/tags/ ]]; then export ALLOW_FAILURE=true; fi
           ./${CCFILE} -b -f -t || ${ALLOW_FAILURE} || [[ ${{ matrix.os }} =~ ubuntu && ${{ matrix.python-version}} == 3.7 ]]
           ./${CCFILE} -b -u -t || ${ALLOW_FAILURE}
 

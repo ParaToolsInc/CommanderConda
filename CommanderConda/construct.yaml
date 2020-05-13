@@ -9,7 +9,6 @@ version: {{ version }}
 company: "ParaTools, Inc."
 
 channels:
-  - https://repo.anaconda.com/pkgs/main/
   - https://conda.anaconda.org/conda-forge
 
 conda_default_channels:
@@ -17,6 +16,7 @@ conda_default_channels:
 
 specs:
   - conda {{ version.split("-")[0] }}
+  - conda-build
   - fasteners
   - monotonic
 {% if name == "CommanderConda3" %}
@@ -32,10 +32,7 @@ specs:
 #  - unidecode
   - wcwidth
 
-# Don't bloat tagged (released) binary distributions with unneeded stuff
-{% if not os.environ.get("GITHUB_REF", "")[0:10] == "refs/tags/" %}
 keep_pkgs: True
-{% endif %}
 
 initialize_by_default: False
 
