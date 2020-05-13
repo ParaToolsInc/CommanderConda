@@ -123,20 +123,12 @@ jobs:
           git fetch origin +refs/tags/*:refs/tags/*
           git fetch --all --tags
           echo "GITHUB_REF: ${GITHUB_REF}"
-      - name: Upgrade Git
-        run: |
-          git --version
-          sudo apt-get install -yy -q software-properties-common
-          sudo add-apt-repository ppa:git-core/ppa -y
-          sudo apt-get update
-          sudo apt-get install git -y
-          git --version
 
       - name: Get notes from tag
         if: startsWith(github.ref, 'refs/tags/')
         run: |
           echo "GITHUB_REF: ${GITHUB_REF}"
-          git for-each-ref --format='%(content)' "${GITHUB_REF}" | sed '/BEGIN PGP SIGNATURE/,/END PGP SIGNATURE/d' | tee release-notes.txt
+          git for-each-ref --format='%(contents)' "${GITHUB_REF}" | sed '/BEGIN PGP SIGNATURE/,/END PGP SIGNATURE/d' | tee release-notes.txt
           printf '\n---\n' >> release-notes.txt
           git for-each-ref --format='Tagged: %(taggername) on %(taggerdate:rfc2822)' "${GITHUB_REF}" | tee -a release-notes.txt
           git for-each-ref --format='Commit: %(objectname)' "${GITHUB_REF}" | tee -a release-notes.txt
