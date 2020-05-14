@@ -82,12 +82,12 @@ jobs:
         shell: bash
         run: |
           ./${CCFILE} -h || true
-          ./${CCFILE} -b -f
+          mkdir -p ${HOME}/taucmdr || true
+          ./${CCFILE} -b -u -p ~/taucmdr/conda
           export ALLOW_FAILURE=false
           if [[ ${{ matrix.os }} =~ macos && ${{ matrix.python-version}} == 2.7 ]]; then export ALLOW_FAILURE=true; fi
           echo "GITHUB_REF=$GITHUB_REF"
-          ./${CCFILE} -b -f -t || ${ALLOW_FAILURE} || [[ ${{ matrix.os }} =~ ubuntu && ${{ matrix.python-version}} == 3.7 ]]
-          ./${CCFILE} -b -u -t || ${ALLOW_FAILURE}
+          ./${CCFILE} -b -u -t -p ~/taucmdr/conda || ${ALLOW_FAILURE}
 
       - name: upload
         if: always()
