@@ -18,127 +18,44 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: ['ubuntu-latest', 'macos-latest', 'windows-latest']
-        python-version: ['3.7', '2.7']
-    outputs:
-      checksum1: ${{ steps.bcd.outputs.out-0 }}
-      checksum2: ${{ steps.bcd.outputs.out-1 }}
-      checksum3: ${{ steps.bcd.outputs.out-2 }}
-      checksum4: ${{ steps.bcd.outputs.out-3 }}
-      checksum5: ${{ steps.bcd.outputs.out-4 }}
-      checksum6: ${{ steps.bcd.outputs.out-5 }}
+        os: [ubuntu-latest, macos-latest]
+        python: [3, 2]
+        arch: [x86_64, aarch64, ppc64le]
+        exclude:
+          - os: macos-latest
+            arch: aarch64
+          - os: macos-latest
+            arch: ppc64le
+    env:
+      COMMANDERCONDA_NAME: CommanderConda${{ matrix.python }}
+      ARCH: ${{ matrix.arch }}
     steps:
       - uses: actions/checkout@v2
-      - uses: goanpeca/setup-miniconda@v1
-        with:
-          activate-environment: constructor-env
-          auto-update-conda: true
-          condarc-file: etc/condarc.yml
-          environment-file: etc/environment.yml
-          python-version: ${{ matrix.python-version }}
-      - name: Conda info
+      - name: Debug info
         run: |
           echo "GITHUB_EVENT_NAME = ${GITHUB_EVENT_NAME}"
           echo "GITHUB_REF = ${GITHUB_REF}"
-          pip install git+git://github.com/conda/constructor@5c9539a95ed7eafb#egg=constructor --force --no-deps
-          conda info
-          conda list
-      - name: Set Environment
-        run: |
-          export PYVER=${{ matrix.python-version }}
-          echo "::set-env name=COMMANDERCONDA_NAME::CommanderConda${PYVER%%.*}"
-      - name: Build conda distribution
-        id: bcd
-        run: |
-          echo "COMMANDERCONDA_NAME = ${COMMANDERCONDA_NAME}"
-          constructor --verbose --test || true
-          constructor --verbose --dry-run ./CommanderConda || true
-          constructor --verbose ./CommanderConda
-          ls -Gla
-          export CCFILE="$(echo CommanderConda*-*)"
-          du -h "${CCFILE}"
-          echo "::set-env name=CCFILE::${CCFILE}"
-          echo "::set-output name=ccfile::${CCFILE}"
-          openssl dgst -sha256 -r "${CCFILE}" | tee "${CCFILE}.sha256"
-          case "${{ matrix.os }}" in
-            macos-*|ubuntu-*)
-              shasum -c "${CCFILE}.sha256"
-              ;;
-          esac
-          export SHA256="$(cut -f 1 -d ' ' < "${CCFILE}.sha256")"
-          echo "::set-env name=SHA256::${SHA256}"
-          echo "::set-output name=sha256::${SHA256}"
-          export SHA_FILE="$(cat "${CCFILE}.sha256")"
-          echo "SHA_FILE=${SHA_FILE}"
-          echo "::set-output name=out-${{ strategy.job-index }}::${SHA_FILE}"
-          echo "bcd.outputs.out-${{ strategy.job-index }}=${SHA_FILE}"
-      - name: Test distribution
-        if: contains( matrix.os, 'ubuntu' ) || contains( matrix.os, 'macos' )
+      - name: Dump GitHub context
         env:
-          SHA256: ${{ hashFiles( steps.bcd.outputs.ccfile ) }}
-        shell: bash
-        run: |
-          ./${CCFILE} -h || true
-          ./${CCFILE} -b -f
-          export ALLOW_FAILURE=false
-          if [[ ${{ matrix.os }} =~ macos && ${{ matrix.python-version}} == 2.7 ]]; then export ALLOW_FAILURE=true; fi
-          echo "GITHUB_REF=$GITHUB_REF"
-          if [[ "${GITHUB_REF}" =~ refs/tags/ ]]; then export ALLOW_FAILURE=true; fi
-          ./${CCFILE} -b -f -t || ${ALLOW_FAILURE} || [[ ${{ matrix.os }} =~ ubuntu && ${{ matrix.python-version}} == 3.7 ]]
-          ./${CCFILE} -b -u -t || ${ALLOW_FAILURE}
-
-      - name: upload
-        if: always()
-        uses: actions/upload-artifact@v2
-        with:
-          path: ${{ steps.bcd.outputs.ccfile }}*
-
-  deploy:
-    runs-on: ubuntu-latest
-    needs: build
-    steps:
-      - uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
-      - uses: actions/download-artifact@v2
-      - name: Show artifacts
-        working-directory: artifact
-        run: ls -RGla
-      - name: Verify SHA256 Checksums
-        working-directory: artifact
-        run: |
-          for sum in *.sha256; do
-            shasum -w -c "${sum}"
-          done
-          rm *.sha256
-      - name: Check passed SHA256 checksums
-        working-directory: artifact
-        run: |
-          printf "${{ join(needs.build.outputs.*, '\n') }}" > sha256-checksums.txt
-          cat sha256-checksums.txt
-          shasum -w -c sha256-checksums.txt
-      - name: Show ref
-        run: |
-          git fetch --prune origin +refs/heads/*:refs/remotes/origin/*
-          git fetch origin +refs/tags/*:refs/tags/*
-          git fetch --all --tags
-          echo "GITHUB_REF: ${GITHUB_REF}"
-
-      - name: Get notes from tag
-        if: startsWith(github.ref, 'refs/tags/')
-        run: |
-          echo "GITHUB_REF: ${GITHUB_REF}"
-          git for-each-ref --format='%(contents)' "${GITHUB_REF}" | sed '/BEGIN PGP SIGNATURE/,/END PGP SIGNATURE/d' | tee release-notes.txt
-          printf '\n---\n' >> release-notes.txt
-          git for-each-ref --format='Tagged: %(taggername) on %(taggerdate:rfc2822)' "${GITHUB_REF}" | tee -a release-notes.txt
-          git for-each-ref --format='Commit: %(objectname)' "${GITHUB_REF}" | tee -a release-notes.txt
-          printf 'Released by [@%s](https://github.com/%s)' "${GITHUB_ACTOR}" "${GITHUB_ACTOR}" >> release-notes.txt
-          cat release-notes.txt
-      - name: Release
-        if: startsWith(github.ref, 'refs/tags/')
-        uses: softprops/action-gh-release@v1
+          GITHUB_CONTEXT: ${{ toJson(github) }}
+        run: echo "$GITHUB_CONTEXT"
+      - name: Dump job context
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          files: 'artifact/*'
-          body_path: './release-notes.txt'
+          JOB_CONTEXT: ${{ toJson(job) }}
+        run: echo "$JOB_CONTEXT"
+      - name: Dump env context
+        env:
+          ENV_CONTEXT: ${{ toJson(env) }}
+        run: echo "$ENV_CONTEXT"
+      - name: Dump runner context
+        env:
+          RUNNER_CONTEXT: ${{ toJson(runner) }}
+        run: echo "$RUNNER_CONTEXT"
+      - name: Dump strategy context
+        env:
+          STRATEGY_CONTEXT: ${{ toJson(strategy) }}
+        run: echo "$STRATEGY_CONTEXT"
+      - name: Dump matrix context
+        env:
+          MATRIX_CONTEXT: ${{ toJson(matrix) }}
+        run: echo "$MATRIX_CONTEXT"
