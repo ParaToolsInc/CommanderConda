@@ -10,7 +10,7 @@ on:
 
 jobs:
   build:
-    name: build (${{ matrix.python-version }}, ${{ matrix.os }})
+    name: build-py${{ matrix.python }}-${{ matrix.os }}-${{ matrix.arch }}
     runs-on: ${{ matrix.os }}
     defaults:
       run:
@@ -29,33 +29,21 @@ jobs:
     env:
       COMMANDERCONDA_NAME: CommanderConda${{ matrix.python }}
       ARCH: ${{ matrix.arch }}
+      QEMU_STATIC_VERSION: v3.1.0-3
     steps:
       - uses: actions/checkout@v2
-      - name: Debug info
+      - uses: actions/cache@v1
+        id: cache-qemu
+        if: runner.os == 'Linux'
+        with:
+          path: build/qemu
+          key: qemu-${{ matrix.arch }}-${{ hashFiles('qemu-sums.sha256') }}
+      - name: get qemu static
+        if: steps.cache-qemu.outputs.cache-hit != 'true' && runner.os == 'Linux'
+        working-directory: ./build/qemu
         run: |
-          echo "GITHUB_EVENT_NAME = ${GITHUB_EVENT_NAME}"
-          echo "GITHUB_REF = ${GITHUB_REF}"
-      - name: Dump GitHub context
-        env:
-          GITHUB_CONTEXT: ${{ toJson(github) }}
-        run: echo "$GITHUB_CONTEXT"
-      - name: Dump job context
-        env:
-          JOB_CONTEXT: ${{ toJson(job) }}
-        run: echo "$JOB_CONTEXT"
-      - name: Dump env context
-        env:
-          ENV_CONTEXT: ${{ toJson(env) }}
-        run: echo "$ENV_CONTEXT"
-      - name: Dump runner context
-        env:
-          RUNNER_CONTEXT: ${{ toJson(runner) }}
-        run: echo "$RUNNER_CONTEXT"
-      - name: Dump strategy context
-        env:
-          STRATEGY_CONTEXT: ${{ toJson(strategy) }}
-        run: echo "$STRATEGY_CONTEXT"
-      - name: Dump matrix context
-        env:
-          MATRIX_CONTEXT: ${{ toJson(matrix) }}
-        run: echo "$MATRIX_CONTEXT"
+          wget https://github.com/multiarch/qemu-user-static/releases/download/${QEMU_STATIC_VERSION}/qemu-${ARCH}-static
+          chmod +x qemu-${ARCH}-static
+      - name: check qemu checksums
+        if: runner.os == 'Linux'
+        run: grep qemu-${ARCH}-static qemu-sums.sha256 | shasum -c
