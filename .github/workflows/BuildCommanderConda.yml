@@ -14,17 +14,19 @@ jobs:
     runs-on: ${{ matrix.os }}
     defaults:
       run:
-        shell: bash -l {0}
+        shell: bash -eilo pipefail {0}
     strategy:
       fail-fast: false
       matrix:
         os: [ubuntu-latest, macos-latest]
         python: [3, 2]
-        arch: [x86_64, aarch64, ppc64le]
-        exclude:
-          - os: macos-latest
+        arch: [x86_64]
+        include:
+          - os: ubuntu-latest
+            python: 3
             arch: aarch64
-          - os: macos-latest
+          - os: ubuntu-latest
+            python: 3
             arch: ppc64le
     env:
       COMMANDERCONDA_NAME: CommanderConda${{ matrix.python }}
@@ -74,6 +76,7 @@ jobs:
       - name: Build and test CommanderConda
         run: |
           ./build_CommanderConda_${{ runner.os }}.sh
+          ls -alh build
           cp build/$COMMANDERCONDA_NAME-*-${{ runner.os }}-$ARCH.sh build/$COMMANDERCONDA_NAME-${{ runner.os }}-$ARCH.sh
           cp build/$COMMANDERCONDA_NAME-*-${{ runner.os }}-$ARCH.sh.sha256 build/$COMMANDERCONDA_NAME-${{ runner.os }}-$ARCH.sh.sha256
           ls -alh build

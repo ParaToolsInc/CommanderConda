@@ -6,12 +6,17 @@ set -o pipefail
 set -o nounset
 
 echo "Installing Miniforge3."
-bash "build/miniforge/${MINIFORGE_FILE}" -b
+chmod +x "build/miniforge/${MINIFORGE_FILE}"
+./build/miniforge/"${MINIFORGE_FILE}" -b
 
 echo "Configuring conda."
 
+set +o nounset
+set +o verbose
 #shellcheck disable=SC1090
 source ~/miniforge3/bin/activate root
+set -o verbose
+set -o nounset
 
 CONSTRUCT_ROOT="$(pwd)"
 export CONSTRUCT_ROOT
