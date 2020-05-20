@@ -9,22 +9,19 @@ version: {{ version }}
 company: "ParaTools, Inc."
 
 channels:
-  - https://repo.anaconda.com/pkgs/main/
   - https://conda.anaconda.org/conda-forge
 
-conda_default_channels:
-  - https://repo.anaconda.com/pkgs/main/
-
 specs:
+  - bzip2
   - conda {{ version.split("-")[0] }}
   - fasteners
   - monotonic
+  - pip
 {% if name == "CommanderConda3" %}
   - python 3.7.*
 {% elif name == "CommanderConda2" %}
   - python 2.7*
 {% endif %}
-  - setuptools
   - six
   - termcolor
 #  - texttable
@@ -32,14 +29,9 @@ specs:
 #  - unidecode
   - wcwidth
 
-# Don't bloat tagged (released) binary distributions with unneeded stuff
-{% if not os.environ.get("GITHUB_REF", "")[0:10] == "refs/tags/" %}
-keep_pkgs: True
-{% endif %}
-
 initialize_by_default: False
 
-install_in_dependency_order: True
+# install_in_dependency_order: True
 
 # installer_type: pkg    [osx]
 

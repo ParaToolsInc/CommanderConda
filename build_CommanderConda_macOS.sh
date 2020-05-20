@@ -19,8 +19,8 @@ echo "============= Create build directory ============="
 mkdir -p build/ || true
 chmod 777 build/
 
-# echo "============= Build the installer ============="
-# bash scripts/build.sh
+echo "============= Build the installer ============="
+bash scripts/build.sh
 
 # echo "============= Test the installer ============="
 # bash scripts/test.sh
