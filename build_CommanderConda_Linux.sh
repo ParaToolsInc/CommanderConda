@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 
+set -o verbose
 set -o errexit
 set -o pipefail
 set -o nounset
@@ -30,7 +31,8 @@ echo "============= Enable QEMU ============="
 docker run --rm --privileged multiarch/qemu-user-static:register --reset --credential yes
 
 echo "============= Build the installer ============="
-docker run --rm -ti -v "$(pwd)":/construct -e COMMANDERCONDA_VERSION -e COMMANDERCONDA_NAME $DOCKERIMAGE /construct/scripts/build.sh
+# See github actions issue #241 comment here: https://github.com/actions/runner/issues/241#issuecomment-577360161
+script -e -c "docker run --rm -ti -v $(pwd):/construct -e COMMANDERCONDA_VERSION -e COMMANDERCONDA_NAME $DOCKERIMAGE /construct/scripts/build.sh"
 
 # echo "============= Test the installer ============="
 # for TEST_IMAGE_NAME in "ubuntu:19.10" "ubuntu:16.04" "ubuntu:18.04" "centos:7" "debian:buster"

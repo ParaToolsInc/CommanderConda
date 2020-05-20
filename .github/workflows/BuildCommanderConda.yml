@@ -40,7 +40,7 @@ jobs:
         if: runner.os == 'Linux'
         with:
           path: build/qemu
-          key: qemu-${{ matrix.arch }}-${{ hashFiles('qemu-sums.sha256') }}
+          key: qemu-${{ hashFiles('qemu-sums.sha256') }}-${{ hashFiles('.github/workflows/BuildCommanderConda.yml') }}
       - name: get qemu static
         if: steps.cache-qemu.outputs.cache-hit != 'true' && runner.os == 'Linux'
         run: |
@@ -57,8 +57,8 @@ jobs:
         id: cache-miniforge
         if: runner.os == 'macOS'
         with:
-          path: ./build/miniforge/
-          key: miniforge-${{ env.MINIFORGE_SHA256 }}
+          path: build/miniforge
+          key: miniforge-${{ env.MINIFORGE_SHA256 }}-${{ hashFiles('.github/workflows/BuildCommanderConda.yml') }}
       - name: get miniforge
         if: steps.cache-miniforge.outputs.cache-hit != 'true' && runner.os == 'macOS'
         run: |
@@ -73,10 +73,11 @@ jobs:
           shasum -c ${MINIFORGE_FILE}.sha256
       - name: Build and test CommanderConda
         run: |
-          bash build_CommanderConda_${{ runner.os }}.sh
+          ./build_CommanderConda_${{ runner.os }}.sh
           cp build/$COMMANDERCONDA_NAME-*-$OS_NAME-$ARCH.sh build/$COMMANDERCONDA_NAME-$OS_NAME-$ARCH.sh
           cp build/$COMMANDERCONDA_NAME-*-$OS_NAME-$ARCH.sh.sha256 build/$COMMANDERCONDA_NAME-$OS_NAME-$ARCH.sh.sha256
           ls -alh build
       - uses: actions/upload-artifact@v2
+        if: always()
         with:
           path: build/CommanderConda*.sh*

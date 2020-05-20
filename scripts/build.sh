@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 
+set -o verbose
 set -o errexit
 set -o pipefail
 set -o nounset
@@ -34,7 +35,7 @@ cd "$TEMP_DIR"
 # This line ill break if there is more than one installer in the folder.
 INSTALLER_PATH=$(find . -name "CommanderConda*.sh" | head -n 1)
 HASH_PATH="$INSTALLER_PATH.sha256"
-sha256sum "$INSTALLER_PATH" > "$HASH_PATH"
+shasum -a 256 "$INSTALLER_PATH" > "$HASH_PATH"
 
 echo "***** Move installer and hash to build folder *****"
 mv "$INSTALLER_PATH" "$CONSTRUCT_ROOT/build/"

@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 
+set -o verbose
 set -o errexit
 set -o pipefail
 set -o nounset
@@ -20,7 +21,7 @@ mkdir -p build/ || true
 chmod 777 build/
 
 echo "============= Build the installer ============="
-bash scripts/build.sh
+./scripts/build.sh
 
 # echo "============= Test the installer ============="
-# bash scripts/test.sh
+# ./scripts/test.sh
