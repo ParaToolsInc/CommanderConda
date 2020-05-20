@@ -34,9 +34,9 @@ echo "============= Build the installer ============="
 # See github actions issue #241 comment here: https://github.com/actions/runner/issues/241#issuecomment-577360161
 script -e -c "docker run --rm -ti -v $(pwd):/construct -e COMMANDERCONDA_VERSION -e COMMANDERCONDA_NAME $DOCKERIMAGE /construct/scripts/build.sh"
 
-# echo "============= Test the installer ============="
-# for TEST_IMAGE_NAME in "ubuntu:19.10" "ubuntu:16.04" "ubuntu:18.04" "centos:7" "debian:buster"
-# do
-#   echo "============= Test installer on $TEST_IMAGE_NAME ============="
-#   docker run --rm -ti -v "$(pwd)":/construct -v "$(pwd)/build/qemu/qemu-${ARCH}-static:/usr/bin/qemu-${ARCH}-static" ${DOCKER_ARCH}/$TEST_IMAGE_NAME /construct/scripts/test.sh
-# done
+echo "============= Test the installer ============="
+for TEST_IMAGE_NAME in "ubuntu:19.10" "ubuntu:16.04" "ubuntu:18.04" "centos:7" "debian:buster"
+do
+  echo "============= Test installer on $TEST_IMAGE_NAME ============="
+  script -e -c "docker run --rm -ti -v $(pwd):/construct -v $(pwd)/build/qemu/qemu-${ARCH}-static:/usr/bin/qemu-${ARCH}-static ${DOCKER_ARCH}/$TEST_IMAGE_NAME /construct/scripts/test.sh"
+done

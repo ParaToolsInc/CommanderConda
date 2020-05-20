@@ -23,5 +23,5 @@ chmod 777 build/
 echo "============= Build the installer ============="
 ./scripts/build.sh
 
-# echo "============= Test the installer ============="
-# ./scripts/test.sh
+echo "============= Test the installer ============="
+./scripts/test.sh
