@@ -25,7 +25,7 @@ set +o nounset
 set +o verbose
 #shellcheck disable=SC1090
 source "${CONDA_PATH}/bin/activate"
-set -o vervose
+set -o verbose
 set -o nounset
 
 echo "***** Print conda info *****"
@@ -46,4 +46,3 @@ python -c "import platform; print(platform.machine())"
 python -c "import platform; print(platform.release())"
 
 echo "***** Done: Building Testing installer *****"
-false
