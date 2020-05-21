@@ -35,7 +35,7 @@ echo "============= Build the installer ============="
 script -e -c "docker run --rm -ti -v $(pwd):/construct -e ARCH -e COMMANDERCONDA_VERSION -e COMMANDERCONDA_NAME $DOCKERIMAGE /construct/scripts/build.sh"
 
 echo "============= Test the installer ============="
-for TEST_IMAGE_NAME in "ubuntu:19.10" "ubuntu:16.04" "ubuntu:18.04" "centos:7" "debian:buster"
+for TEST_IMAGE_NAME in "ubuntu:20.04" "ubuntu:16.04" "ubuntu:18.04" "centos:7" "debian:buster" "opensuse:42.3"
 do
   echo "============= Test installer on $TEST_IMAGE_NAME ============="
   script -e -c "docker run --rm -ti -v $(pwd):/construct -v $(pwd)/build/qemu/qemu-${ARCH}-static:/usr/bin/qemu-${ARCH}-static -e ARCH ${DOCKER_ARCH}/$TEST_IMAGE_NAME /construct/scripts/test.sh"
