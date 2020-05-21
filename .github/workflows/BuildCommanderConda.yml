@@ -96,7 +96,7 @@ jobs:
           else
             OS_NAME='${{ runner.os }}'
           fi
-          cp "${COMMANDERCONDA_NAME}"-*-"${OS_NAME}-${ARCH}.sh" "build/${COMMANDERCONDA_NAME}-${OS_NAME}-${ARCH}.sh"
+          cp "${COMMANDERCONDA_NAME}"-*-"${OS_NAME}-${ARCH}.sh" "${COMMANDERCONDA_NAME}-${OS_NAME}-${ARCH}.sh"
           shasum -a 256 "${COMMANDERCONDA_NAME}-${OS_NAME}-${ARCH}.sh" | sed 's/  / \*/' | tee "${COMMANDERCONDA_NAME}-${OS_NAME}-${ARCH}.sh.sha256"
           ls -alh
           echo "Setting sha256 checksum outputs"
