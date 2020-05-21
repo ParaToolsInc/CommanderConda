@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-set -o verbose
+# set -o verbose
 set -o errexit
 set -o pipefail
 set -o nounset
@@ -22,10 +22,10 @@ bash "$INSTALLER_PATH" -b -p "$CONDA_PATH"
 
 echo "***** Setup conda *****"
 set +o nounset
-set +o verbose
+# set +o verbose
 #shellcheck disable=SC1090
 source "${CONDA_PATH}/bin/activate"
-set -o verbose
+# set -o verbose
 set -o nounset
 
 echo "***** Print conda info *****"

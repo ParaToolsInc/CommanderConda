@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-set -o verbose
+# set -o verbose
 set -o errexit
 set -o pipefail
 set -o nounset
@@ -12,10 +12,10 @@ chmod +x "build/miniforge/${MINIFORGE_FILE}"
 echo "Configuring conda."
 
 set +o nounset
-set +o verbose
+# set +o verbose
 #shellcheck disable=SC1090
 source ~/miniforge3/bin/activate root
-set -o verbose
+# set -o verbose
 set -o nounset
 
 CONSTRUCT_ROOT="$(pwd)"

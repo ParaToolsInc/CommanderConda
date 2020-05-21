@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-set -o verbose
+# set -o verbose
 set -o errexit
 set -o pipefail
 set -o nounset

@@ -88,21 +88,21 @@ jobs:
         run: ./build_CommanderConda_${{ runner.os }}.sh
       - name: Checksum Outputs
         id: cksums
+        working-directory: build
         run: |
-          ls -alh build
+          ls -alh
           if [[ ${{ runner.os }} == macOS ]]; then
             OS_NAME='MacOSX'
           else
             OS_NAME='${{ runner.os }}'
           fi
-          cp "build/${COMMANDERCONDA_NAME}-*-${OS_NAME}-${ARCH}.sh" "build/${COMMANDERCONDA_NAME}-${OS_NAME}-${ARCH}.sh"
-          cd build
+          cp "${COMMANDERCONDA_NAME}"-*-"${OS_NAME}-${ARCH}.sh" "build/${COMMANDERCONDA_NAME}-${OS_NAME}-${ARCH}.sh"
           shasum -a 256 "${COMMANDERCONDA_NAME}-${OS_NAME}-${ARCH}.sh" | sed 's/  / \*/' | tee "${COMMANDERCONDA_NAME}-${OS_NAME}-${ARCH}.sh.sha256"
           ls -alh
           echo "Setting sha256 checksum outputs"
           echo "out-${{ strategy.job-index }}:"
-          echo "$(cat "${COMMANDERCONDA_NAME}-*.sh.sha256")"
-          echo "::set-output name=out-${{ strategy.job-index }}::$(cat "${COMMANDERCONDA_NAME}-*.sh.sha256")"
+          echo "$(cat "${COMMANDERCONDA_NAME}"-*.sh.sha256)"
+          echo "::set-output name=out-${{ strategy.job-index }}::$(cat "${COMMANDERCONDA_NAME}"-*.sh.sha256)"
       - uses: actions/upload-artifact@v2
         if: always()
         with:
