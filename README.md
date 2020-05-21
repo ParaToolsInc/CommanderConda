@@ -18,7 +18,7 @@ The packages included in the distribution are defined in the [construct.yaml] fi
 These packages must be kept in sync with [TAU Commander] development.
 [GitHub Actions] is used to automate the creation and release of this custom [Anaconda] distribution using [Constructor].
 The mechanisms for generating Python2 and Python3 packages using Jinja2 templating and distributions for multiple achitectures
-is based on the approach used by the [miniforge project].
+is based on the approach used by the [miniforge project][miniforge].
 
 ## [TAU Commander] Developers
 
@@ -35,11 +35,19 @@ To create a new release please follow these steps:
 
 | Arch-OS \ Python Version | 2.7 | 3.7 |
 | --------------------: | :--: | :--: |
-| x86_64 Linux | Supported, implemented, deprecated | Supported, WIP |
-| x86_64 macOS | Supported, WIP, deprecated | Supported, WIP |
+| x86_64 Linux | Supported, implemented, deprecated | Supported |
+| x86_64 macOS | Supported, implemented, deprecated | Supported |
 | x86_64 Windows | Unsupported, deprecated | Unsupported |
-| aarch64 Linux | Supported, WIP, deprecated | Supported, WIP |
-| ppc64le Linux | Supported, WIP, deprecated | Supported, WIP |
+| aarch64 Linux | Unsupported | Supported |
+| ppc64le Linux | Unsupported | Supported |
+
+## Acknowledgements
+
+Special thanks to the [conda-forge/miniforge][miniforge],
+from which some code and scripts have been borrowed and adapted,
+and to the [conda-forge project] in general.
+[miniforge] is licensed under the same [BSD-3-clause license] as [this project]
+and [their LICENSE] is distributed along with the source code of this project.
 
 [GHA badge]: https://github.com/ParaToolsInc/CommanderConda/workflows/.github/workflows/BuildCommanderConda.yml/badge.svg
 [Release badge]: https://img.shields.io/github/v/release/ParaToolsInc/CommanderConda?sort=semver
@@ -49,6 +57,10 @@ To create a new release please follow these steps:
 [construct.yaml]: https://github.com/ParaToolsInc/CommanderConda/blob/master/CommanderConda/construct.yaml
 [GitHub Actions]: https://help.github.com/en/actions
 [Constructor]: https://github.com/conda/constructor
-[miniforge project]: https://github.com/conda-forge/miniforge
+[miniforge]: https://github.com/conda-forge/miniforge
 [pull request]: https://github.com/ParaToolsInc/CommanderConda/pulls
 [Anaconda]: https://docs.conda.io/projects/conda/en/latest/
+[conda-forge project]: https://conda-forge.org
+[BSD-3-clause license]: https://opensource.org/licenses/BSD-3-Clause
+[this project]: https://github.com/ParaToolsInc/CommanderConda/blob/master/LICENSE
+[their LICENSE]: https://github.com/ParaToolsInc/CommanderConda/blob/master/miniforge-LICENSE

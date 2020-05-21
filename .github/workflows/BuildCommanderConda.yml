@@ -85,7 +85,7 @@ jobs:
         working-directory: build/miniforge
         run: |
           echo "${MINIFORGE_SHA256} *${MINIFORGE_FILE}" | tee ${MINIFORGE_FILE}.sha256
-          shasum -c ${MINIFORGE_FILE}.sha256
+          shasum -c ./${MINIFORGE_FILE}.sha256
       - name: Build and test CommanderConda
         run: ./build_CommanderConda_${{ runner.os }}.sh
       - name: Checksum Outputs
@@ -132,7 +132,7 @@ jobs:
       - name: Check passed SHA256 checksums
         working-directory: artifact
         run: |
-          printf "${{ join(needs.build.outputs.*) }}" | sed '$a\' | tee sha256-checksums.txt
+          printf "${{ join(needs.build.outputs.*, '') }}" | sed '$a\' | tee sha256-checksums.txt
           for f in *.sh ; do
             echo "Checking passed SHA256 checksum for $f."
             grep "$f" sha256-checksums.txt | shasum -w -c
