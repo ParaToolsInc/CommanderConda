@@ -28,8 +28,5 @@ chmod 777 build/
 echo "============= Build the installer ============="
 ./scripts/build.sh
 
-# Make output match correct name for macOS
-rename --subst-all "MacOSX" "macOS" build/"${COMMANDERCONDA_NAME}"-*-MacOSX-"${ARCH}".sh* || true
-
 echo "============= Test the installer ============="
 ./scripts/test.sh

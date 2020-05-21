@@ -1,3 +1,5 @@
+name: Build Commander Conda
+
 on:
   push:
     branches:
@@ -7,6 +9,12 @@ on:
   pull_request:
     branches:
     - '*'
+
+env:
+  QEMU_STATIC_VERSION: "v3.1.0-3"
+  MINIFORGE_URL: "https://github.com/conda-forge/miniforge/releases/download/4.8.3-1"
+  MINIFORGE_FILE: "Miniforge3-4.8.3-1-MacOSX-x86_64.sh"
+  MINIFORGE_SHA256: fd5dcee77efe428242c9d4c77bf00167f74aca99cf17df7a509359bb4f515164
 
 jobs:
   build:
@@ -28,13 +36,16 @@ jobs:
           - os: ubuntu-latest
             python: 3
             arch: ppc64le
+    outputs:
+      checksum1: ${{ steps.cksums.outputs.out-0 }}
+      checksum2: ${{ steps.cksums.outputs.out-1 }}
+      checksum3: ${{ steps.cksums.outputs.out-2 }}
+      checksum4: ${{ steps.cksums.outputs.out-3 }}
+      checksum5: ${{ steps.cksums.outputs.out-4 }}
+      checksum6: ${{ steps.cksums.outputs.out-5 }}
     env:
       COMMANDERCONDA_NAME: CommanderConda${{ matrix.python }}
       ARCH: ${{ matrix.arch }}
-      QEMU_STATIC_VERSION: "v3.1.0-3"
-      MINIFORGE_URL: "https://github.com/conda-forge/miniforge/releases/download/4.8.3-1"
-      MINIFORGE_FILE: "Miniforge3-4.8.3-1-MacOSX-x86_64.sh"
-      MINIFORGE_SHA256: fd5dcee77efe428242c9d4c77bf00167f74aca99cf17df7a509359bb4f515164
     steps:
       - uses: actions/checkout@v2
       - uses: actions/cache@v1
@@ -74,12 +85,24 @@ jobs:
           echo "${MINIFORGE_SHA256} *${MINIFORGE_FILE}" | tee ${MINIFORGE_FILE}.sha256
           shasum -c ${MINIFORGE_FILE}.sha256
       - name: Build and test CommanderConda
+        run: ./build_CommanderConda_${{ runner.os }}.sh
+      - name: Checksum Outputs
+        id: cksums
         run: |
-          ./build_CommanderConda_${{ runner.os }}.sh
           ls -alh build
-          cp build/${COMMANDERCONDA_NAME}-*-$ARCH.sh        build/${COMMANDERCONDA_NAME}-${{ runner.os }}-$ARCH.sh
-          cp build/${COMMANDERCONDA_NAME}-*-$ARCH.sh.sha256 build/${COMMANDERCONDA_NAME}-${{ runner.os }}-$ARCH.sh.sha256
-          ls -alh build
+          if [[ ${{ runner.os }} == macOS ]]; then
+            OS_NAME='MacOSX'
+          else
+            OS_NAME='${{ runner.os }}'
+          fi
+          cp "build/${COMMANDERCONDA_NAME}-*-${OS_NAME}-${ARCH}.sh" "build/${COMMANDERCONDA_NAME}-${OS_NAME}-${ARCH}.sh"
+          cd build
+          shasum -a 256 "${COMMANDERCONDA_NAME}-${OS_NAME}-${ARCH}.sh" | sed 's/  / \*/' | tee "${COMMANDERCONDA_NAME}-${OS_NAME}-${ARCH}.sh.sha256"
+          ls -alh
+          echo "Setting sha256 checksum outputs"
+          echo "out-${{ strategy.job-index }}:"
+          echo "$(cat "${COMMANDERCONDA_NAME}-*.sh.sha256")"
+          echo "::set-output name=out-${{ strategy.job-index }}::$(cat "${COMMANDERCONDA_NAME}-*.sh.sha256")"
       - uses: actions/upload-artifact@v2
         if: always()
         with:
@@ -103,12 +126,12 @@ jobs:
             shasum -w -c "${sum}"
           done
           rm *.sha256
-      # - name: Check passed SHA256 checksums
-      #   working-directory: artifact
-      #   run: |
-      #     printf "${{ join(needs.build.outputs.*, '\n') }}" > sha256-checksums.txt
-      #     cat sha256-checksums.txt
-      #     shasum -w -c sha256-checksums.txt
+      - name: Check passed SHA256 checksums
+        working-directory: artifact
+        run: |
+          printf "${{ join(needs.build.outputs.*, '\n') }}" > sha256-checksums.txt
+          cat sha256-checksums.txt
+          shasum -w -c sha256-checksums.txt
       - name: Show ref
         run: |
           git fetch --prune origin +refs/heads/*:refs/remotes/origin/*
