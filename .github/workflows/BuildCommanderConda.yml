@@ -10,11 +10,11 @@ on:
 
 jobs:
   build:
-    name: build-py${{ matrix.python }}-${{ matrix.os }}-${{ matrix.arch }}
+    name: py${{ matrix.python }}-${{ matrix.arch }}-${{ matrix.os }}
     runs-on: ${{ matrix.os }}
     defaults:
       run:
-        shell: bash -eilo pipefail {0}
+        shell: bash -elo pipefail {0}
     strategy:
       fail-fast: false
       matrix:
