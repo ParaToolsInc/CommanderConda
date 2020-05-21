@@ -4,6 +4,8 @@ on:
     - '*'
   pull_request:
 
+name: Lint scripts and spelling
+
 jobs:
   linting:
     runs-on: ubuntu-latest
