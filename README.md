@@ -8,6 +8,7 @@ Custom Conda distribution in support of TAU Commander
 
 [![.github/workflows/BuildCommanderConda.yml][GHA badge]][workflow]
 [![GitHub release (latest SemVer)][Release badge]][latest]
+[![License Badge][license badge]][license]
 
 ## About
 
@@ -46,13 +47,15 @@ To create a new release please follow these steps:
 Special thanks to the [conda-forge/miniforge][miniforge],
 from which some code and scripts have been borrowed and adapted,
 and to the [conda-forge project] in general.
-[miniforge] is licensed under the same [BSD-3-clause license] as [this project]
+[miniforge] is licensed under the same [BSD-3-clause license] as [this project][license]
 and [their LICENSE] is distributed along with the source code of this project.
 
-[GHA badge]: https://github.com/ParaToolsInc/CommanderConda/workflows/.github/workflows/BuildCommanderConda.yml/badge.svg
+[GHA badge]: https://github.com/ParaToolsInc/CommanderConda/workflows/Build%20Commander%20Conda/badge.svg?branch=master&event=push
 [Release badge]: https://img.shields.io/github/v/release/ParaToolsInc/CommanderConda?sort=semver
-[workflow]: https://github.com/ParaToolsInc/CommanderConda/blob/master/.github/workflows/BuildCommanderConda.yml
+[workflow]: https://github.com/ParaToolsInc/CommanderConda/actions?query=workflow%3A%22Build+Commander+Conda%22
 [latest]: https://github.com/ParaToolsInc/CommanderConda/releases/latest
+[license badge]: https://img.shields.io/github/license/ParaToolsInc/CommanderConda
+[license]: https://github.com/ParaToolsInc/CommanderConda/blob/master/LICENSE
 [TAU Commander]: https://github.com/ParaToolsInc/taucmdr
 [construct.yaml]: https://github.com/ParaToolsInc/CommanderConda/blob/master/CommanderConda/construct.yaml
 [GitHub Actions]: https://help.github.com/en/actions
@@ -62,5 +65,4 @@ and [their LICENSE] is distributed along with the source code of this project.
 [Anaconda]: https://docs.conda.io/projects/conda/en/latest/
 [conda-forge project]: https://conda-forge.org
 [BSD-3-clause license]: https://opensource.org/licenses/BSD-3-Clause
-[this project]: https://github.com/ParaToolsInc/CommanderConda/blob/master/LICENSE
 [their LICENSE]: https://github.com/ParaToolsInc/CommanderConda/blob/master/miniforge-LICENSE
