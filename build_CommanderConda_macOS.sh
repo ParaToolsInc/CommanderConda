@@ -29,8 +29,7 @@ echo "============= Build the installer ============="
 ./scripts/build.sh
 
 # Make output match correct name for macOS
-mv build/"${COMMANDERCONDA_NAME}"-*-MacOSX-"${ARCH}".sh build/"${COMMANDERCONDA_NAME}"-*-macOS-"${ARCH}".sh || true
-mv build/"${COMMANDERCONDA_NAME}"-*-MacOSX-"${ARCH}".sh.sha256 build/"${COMMANDERCONDA_NAME}"-*-macOS-"${ARCH}".sh.sha256 || true
+rename --subst-all "MacOSX" "macOS" build/"${COMMANDERCONDA_NAME}"-*-MacOSX-"${ARCH}".sh* || true
 
 echo "============= Test the installer ============="
 ./scripts/test.sh
