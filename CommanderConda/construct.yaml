@@ -14,9 +14,6 @@ channels:
 specs:
   - bzip2
   - conda {{ version.split("-")[0] }}
-{% if not os.environ.get("GITHUB_REF", "")[0:10] == "refs/tags/" %}
-  - conda-build
-{% endif %}
   - fasteners
   - monotonic
   - pip
@@ -31,11 +28,6 @@ specs:
 #  - tinydb
 #  - unidecode
   - wcwidth
-
-# Don't bloat tagged (released) binary distributions with unneeded stuff
-{% if not os.environ.get("GITHUB_REF", "")[0:10] == "refs/tags/" %}
-keep_pkgs: True
-{% endif %}
 
 initialize_by_default: False
 
