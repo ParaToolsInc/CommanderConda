@@ -150,7 +150,7 @@ jobs:
           git for-each-ref --format='%(contents)' "${GITHUB_REF}" | sed '/BEGIN PGP SIGNATURE/,/END PGP SIGNATURE/d' | tee release-notes.txt
           printf '\n---\n' >> release-notes.txt
           git for-each-ref --format='Tagged: %(taggername) on %(taggerdate:rfc2822)' "${GITHUB_REF}" | tee -a release-notes.txt
-          git for-each-ref --format='Commit: %(objectname)' "${GITHUB_REF}" | tee -a release-notes.txt
+          git rev-list -n 1 "${GITHUB_REF}" | tee -a release-notes.txt
           printf 'Released by [@%s](https://github.com/%s)' "${GITHUB_ACTOR}" "${GITHUB_ACTOR}" >> release-notes.txt
           cat release-notes.txt
       - name: Release
