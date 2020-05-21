@@ -130,7 +130,10 @@ jobs:
         working-directory: artifact
         run: |
           printf "${{ join(needs.build.outputs.*, '\n') }}" | sed '$a\' | tee sha256-checksums.txt
-          shasum -w -c sha256-checksums.txt
+          for f in *.sh ; do
+            echo "Checking passed SHA256 checksum for $f."
+            grep "$f" sha256-checksums.txt | shasum -w -c
+          done
       - name: Show ref
         run: |
           git fetch --prune origin +refs/heads/*:refs/remotes/origin/*
