@@ -87,7 +87,7 @@ jobs:
           echo "${MINIFORGE_SHA256} *${MINIFORGE_FILE}" | tee ${MINIFORGE_FILE}.sha256
           shasum -c ./${MINIFORGE_FILE}.sha256
       - name: Build and test CommanderConda
-        run: export GITHUB_REF && ./build_CommanderConda_${{ runner.os }}.sh
+        run: ./build_CommanderConda_${{ runner.os }}.sh
       - name: Checksum Outputs
         id: cksums
         working-directory: build

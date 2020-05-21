@@ -19,9 +19,7 @@ INSTALLER_PATH=$(find build/ -name "CommanderConda*$ARCH.sh" | head -n 1)
 echo "***** Run the installer *****"
 chmod +x "$INSTALLER_PATH"
 
-echo "GITHUB_REF: ${GITHUB_REF}"
-
-if [[ "${GITHUB_REF:-}" =~ refs/tags/ ]]; then
+if ! [[ "${GITHUB_REF:-}" =~ ^refs/tags/ ]]; then
     echo "***** Performing install and self-tests *****"
     "$INSTALLER_PATH" -b -u -t -p "$CONDA_PATH"
 else
