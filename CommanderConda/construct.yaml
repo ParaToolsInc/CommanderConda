@@ -24,10 +24,15 @@ specs:
 {% endif %}
   - six
   - termcolor
-#  - texttable
+  - texttable
 #  - tinydb
 #  - unidecode
   - wcwidth
+
+# Don't bloat tagged (released) binary distributions with unneeded stuff
+{% if not os.environ.get("GITHUB_REF", "")[0:10] == "refs/tags/" %}
+keep_pkgs: True
+{% endif %}
 
 initialize_by_default: False
 
