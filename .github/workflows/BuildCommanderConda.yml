@@ -102,6 +102,7 @@ jobs:
           echo "Setting sha256 checksum outputs"
           echo "out-${{ strategy.job-index }}:"
           awk '{printf "%s\\n", $0}' "${COMMANDERCONDA_NAME}"-*.sh.sha256
+          printf '\n'
           echo "::set-output name=out-${{ strategy.job-index }}::$(awk '{printf "%s\\n", $0}' "${COMMANDERCONDA_NAME}"-*.sh.sha256)"
       - uses: actions/upload-artifact@v2
         if: always()
