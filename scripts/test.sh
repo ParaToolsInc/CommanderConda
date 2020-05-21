@@ -18,7 +18,15 @@ INSTALLER_PATH=$(find build/ -name "CommanderConda*$ARCH.sh" | head -n 1)
 
 echo "***** Run the installer *****"
 chmod +x "$INSTALLER_PATH"
-bash "$INSTALLER_PATH" -b -p "$CONDA_PATH"
+
+echo "GITHUB_REF: ${GITHUB_REF}"
+
+if [[ "${GITHUB_REF:-}" =~ refs/tags/ ]]; then
+    echo "***** Performing install and self-tests *****"
+    "$INSTALLER_PATH" -b -u -t -p "$CONDA_PATH"
+else
+    "$INSTALLER_PATH" -b -u -p "$CONDA_PATH"
+fi
 
 echo "***** Setup conda *****"
 set +o nounset
