@@ -53,7 +53,11 @@ echo "***** Print system information from Python *****"
 python -c "print('Hello CommanderConda!')"
 python -c "import platform; print(platform.architecture())"
 python -c "import platform; print(platform.system())"
+THIS_OS="$(uname)"
+export THIS_OS
+python -c "import platform; import os; assert platform.system() in os.environ.get('THIS_OS')"
 python -c "import platform; print(platform.machine())"
+python -c "import platform; import os; assert platform.machine() in os.environ.get('ARCH')"
 python -c "import platform; print(platform.release())"
 
 echo "***** Done: Building Testing installer *****"
