@@ -42,7 +42,7 @@ jobs:
         if: runner.os == 'Linux'
         with:
           path: build/qemu
-          key: qemu-${{ hashFiles('qemu-sums.sha256') }}-${{ hashFiles('.github/workflows/BuildCommanderConda.yml') }}
+          key: qemu-${{ matrix.arch }}-${{ hashFiles('qemu-sums.sha256') }}-${{ hashFiles('.github/workflows/BuildCommanderConda.yml') }}
       - name: get qemu static
         if: steps.cache-qemu.outputs.cache-hit != 'true' && runner.os == 'Linux'
         run: |
@@ -77,9 +77,11 @@ jobs:
         run: |
           ./build_CommanderConda_${{ runner.os }}.sh
           ls -alh build
-          cp build/$COMMANDERCONDA_NAME-*-${{ runner.os }}-$ARCH.sh build/$COMMANDERCONDA_NAME-${{ runner.os }}-$ARCH.sh
-          cp build/$COMMANDERCONDA_NAME-*-${{ runner.os }}-$ARCH.sh.sha256 build/$COMMANDERCONDA_NAME-${{ runner.os }}-$ARCH.sh.sha256
-          ls -alh build
+          chmod a+rwX build
+          cd build
+          cp *-${{ runner.os }}-$ARCH.sh "$COMMANDERCONDA_NAME-${{ runner.os }}-$ARCH.sh"
+          cp *-${{ runner.os }}-$ARCH.sh.sha256 "$COMMANDERCONDA_NAME-${{ runner.os }}-$ARCH.sh.sha256"
+          ls -alh
       - uses: actions/upload-artifact@v2
         if: always()
         with:
