@@ -31,12 +31,15 @@ set -o nounset
 echo "***** Print conda info *****"
 conda info
 
+echo "***** Print conda list *****"
+conda list
+
 echo "***** Run conda update *****"
 conda update --all -y
 
 echo "***** Python path *****"
 python -c "import sys; print(sys.executable)"
-python -c "import sys; assert 'commanderconda' in sys.executable"
+python -c "import sys; assert 'taucmdr' in sys.executable"
 
 echo "***** Print system information from Python *****"
 python -c "print('Hello CommanderConda!')"
