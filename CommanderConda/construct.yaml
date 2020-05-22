@@ -24,9 +24,9 @@ specs:
 {% endif %}
   - six
   - termcolor
-  - texttable
-  - tinydb
-  - unidecode
+  # - texttable
+  # - tinydb
+  # - unidecode
   - wcwidth
 
 initialize_by_default: False
