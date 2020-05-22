@@ -52,4 +52,10 @@ python -c "import platform; print(platform.machine())"
 python -c "import platform; import os; assert platform.machine() in os.environ.get('ARCH')"
 python -c "import platform; print(platform.release())"
 
+# Import the important packages from CommanderConda
+python -c "import fasteners; import six; from termcolor import termcolor; from texttable import Texttable"
+
+# Print the zen of python
+python -c "import this"
+
 echo "***** Done: Building Testing installer *****"
