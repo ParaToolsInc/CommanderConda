@@ -56,10 +56,11 @@ python -c "import platform; print(platform.release())"
 python -c \
        "import fasteners; \
         import six; \
-        import termcolor;" # \
-#        from texttable import Texttable; \
+        import termcolor; \
+        from texttable import Texttable;" # \
 #        import tinydb; \
 #        from unidecode import unidecode"
+
 
 # Print the zen of python
 python -c "import this"
