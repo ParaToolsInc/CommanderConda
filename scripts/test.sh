@@ -57,8 +57,8 @@ python -c \
        "import fasteners; \
         import six; \
         import termcolor; \
-        from texttable import Texttable;" # \
-#        import tinydb; \
+        from texttable import Texttable; \
+        import tinydb;" # \
 #        from unidecode import unidecode"
 
 
