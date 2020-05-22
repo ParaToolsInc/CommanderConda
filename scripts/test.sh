@@ -58,6 +58,7 @@ python -c \
         import six; \
         import termcolor; \
         from texttable import Texttable; \
+        import tinydb; \
         from unidecode import unidecode"
 
 # Print the zen of python

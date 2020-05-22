@@ -8,7 +8,7 @@ set -o nounset
 case "${ARCH}" in
     x86_64)
         DOCKER_ARCH=amd64
-        DOCKERIMAGE=condaforge/linux-anvil-comp7
+        DOCKERIMAGE=condaforge/linux-anvil-comp7:88138de6129f
         ;;
     ppc64le)
         DOCKER_ARCH=ppc64le
