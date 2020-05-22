@@ -1,9 +1,0 @@
-name: constructor-env
-channels:
-  - defaults
-  - conda-forge
-dependencies:
-  - conda-build
-  - constructor>=3.0.1
-  - jinja2
-  - openssl
