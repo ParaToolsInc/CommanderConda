@@ -25,7 +25,7 @@ specs:
   - six
   - termcolor
   - texttable
-  - tinydb
+#  - tinydb
   - unidecode
   - wcwidth
 

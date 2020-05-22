@@ -56,9 +56,8 @@ python -c "import platform; print(platform.release())"
 python -c \
        "import fasteners; \
         import six; \
-        from termcolor import termcolor; \
+        import termcolor; \
         from texttable import Texttable; \
-        import tinydb; \
         from unidecode import unidecode"
 
 # Print the zen of python
