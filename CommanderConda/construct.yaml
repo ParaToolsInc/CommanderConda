@@ -17,6 +17,7 @@ specs:
   - fasteners
   - monotonic
   - pip
+  - pyannotate
 {% if name == "CommanderConda3" %}
   - python 3.7.*
 {% elif name == "CommanderConda2" %}
