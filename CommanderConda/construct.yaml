@@ -35,6 +35,7 @@ specs:
 {% elif name == "CommanderConda2" %}
   - python 2.7*
 {% endif %}
+  - setuptools
   - six
   - termcolor
   - texttable
