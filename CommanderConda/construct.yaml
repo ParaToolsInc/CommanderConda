@@ -22,7 +22,6 @@ specs:
   - bzip2
   - conda {{ version.split("-")[0] }}
   - fasteners
-  - git
   - ipykernel
   - ipywidgets 7.5
   - monotonic
