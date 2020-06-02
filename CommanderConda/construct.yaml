@@ -10,14 +10,27 @@ company: "ParaTools, Inc."
 
 channels:
   - https://conda.anaconda.org/conda-forge
+  - https://conda.anaconda.org/plotly
+  - http://repo.anaconda.com/pkgs/main
+
+conda_default_channels:
+  - https://conda.anaconda.org/conda-forge
+  - https://conda.anaconda.org/plotly
+  - http://repo.anaconda.com/pkgs/main
 
 specs:
   - bzip2
   - conda {{ version.split("-")[0] }}
   - fasteners
+  - git
+  - ipykernel
+  - ipywidgets 7.5
   - monotonic
+  - nodejs
   - pip
+  - plotly 4.7.1
 {% if name == "CommanderConda3" %}
+  - jupyterlab
   - python 3.7.*
 {% elif name == "CommanderConda2" %}
   - python 2.7*
@@ -31,7 +44,7 @@ specs:
 
 initialize_by_default: False
 
-# install_in_dependency_order: True
+install_in_dependency_order: True
 
 # installer_type: pkg    [osx]
 
