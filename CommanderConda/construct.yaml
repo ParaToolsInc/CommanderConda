@@ -1,5 +1,5 @@
 {% set name = os.environ.get("COMMANDERCONDA_NAME", "CommanderConda2") %}
-{% set version = os.environ.get("COMMANDERCONDA_VERSION", "4.8.3-0") %}
+{% set version = os.environ.get("COMMANDERCONDA_VERSION", "4.8.4-0") %}
 
 
 name: {{ name }}
@@ -9,12 +9,16 @@ version: {{ version }}
 company: "ParaTools, Inc."
 
 channels:
-  - https://conda.anaconda.org/conda-forge
+  # specifying the channel with the full URL adds two channels
+  # when the end user adds the channel without the full URLxsx
+  - conda-forge                                  # [not (osx and arm64)]
+  - https://conda-web.anaconda.org/conda-forge   # [osx and arm64]
   - https://conda.anaconda.org/plotly
   - http://repo.anaconda.com/pkgs/main
 
 conda_default_channels:
-  - https://conda.anaconda.org/conda-forge
+  - conda-forge                                  # [not (osx and arm64)]
+  - https://conda-web.anaconda.org/conda-forge   # [osx and arm64]
   - https://conda.anaconda.org/plotly
   - http://repo.anaconda.com/pkgs/main
 
@@ -33,9 +37,9 @@ specs:
   - python 3.7.*
 {% elif name == "CommanderConda2" %}
   - python 2.7*
+  - six
 {% endif %}
   - setuptools
-  - six
   - termcolor
   - texttable
   - tinydb

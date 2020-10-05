@@ -11,11 +11,11 @@ CONSTRUCT_ROOT="${CONSTRUCT_ROOT:-/construct}"
 
 cd "$CONSTRUCT_ROOT"
 
-# Constructor should be >= 3.0.1 for aarch64.
-# See https://github.com/conda-forge/miniforge/pull/2#issuecomment-554394343
+# Constructor should be latest for non-native building
+# See https://github.com/conda/constructor
 echo "***** Install constructor *****"
-conda install -y "constructor>=3.0.1" jinja2
-pip install git+git://github.com/conda/constructor@5c9539a95ed7eafb#egg=constructor --force --no-deps
+conda install -y "constructor>=3.1.0" jinja2
+pip install git+git://github.com/conda/constructor@926707a34def8cb51be640b98842180260e7fa0a#egg=constructor --force --no-deps
 conda list
 
 echo "***** Make temp directory *****"
