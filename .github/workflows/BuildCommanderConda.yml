@@ -14,9 +14,9 @@ on:
 
 env:
   QEMU_STATIC_VERSION: "v3.1.0-3"
-  MINIFORGE_URL: "https://github.com/conda-forge/miniforge/releases/download/4.8.3-1"
-  MINIFORGE_FILE: "Miniforge3-4.8.3-1-MacOSX-x86_64.sh"
-  MINIFORGE_SHA256: fd5dcee77efe428242c9d4c77bf00167f74aca99cf17df7a509359bb4f515164
+  MINIFORGE_URL: "https://github.com/conda-forge/miniforge/releases/download/4.8.5-1"
+  MINIFORGE_FILE: "Miniforge3-4.8.5-1-MacOSX-x86_64.sh"
+  MINIFORGE_SHA256: 50f4568d29ed830abaabc7bf9805d42910e66d90e78d8188382cf77713c7063f
 
 jobs:
   build:
@@ -29,15 +29,8 @@ jobs:
       fail-fast: false
       matrix:
         os: [ubuntu-latest, macos-latest]
-        python: [3, 2]
-        arch: [x86_64]
-        include:
-          - os: ubuntu-latest
-            python: 3
-            arch: aarch64
-          - os: ubuntu-latest
-            python: 3
-            arch: ppc64le
+        python: [3]
+        arch: [x86_64, aarch64, ppc64le]
     outputs:
       checksum1: ${{ steps.cksums.outputs.out-0 }}
       checksum2: ${{ steps.cksums.outputs.out-1 }}
