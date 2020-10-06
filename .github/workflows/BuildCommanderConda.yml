@@ -16,7 +16,7 @@ env:
   QEMU_STATIC_VERSION: "v3.1.0-3"
   MINIFORGE_URL: "https://github.com/conda-forge/miniforge/releases/download/4.8.5-1"
   MINIFORGE_FILE: "Miniforge3-4.8.5-1-MacOSX-x86_64.sh"
-  MINIFORGE_SHA256: 50f4568d29ed830abaabc7bf9805d42910e66d90e78d8188382cf77713c7063f
+  MINIFORGE_SHA256: "5054599ee6ea639209b831d859935da50229040d7993b1736358734d1e9c5edc"
 
 jobs:
   build:
