@@ -28,8 +28,11 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest, macos-latest]
+        os: [ubuntu-latest]
         arch: [x86_64, aarch64, ppc64le]
+        include:
+          - os: macos-latest
+            arch: x86_64
     outputs:
       checksum1: ${{ steps.cksums.outputs.out-0 }}
       checksum2: ${{ steps.cksums.outputs.out-1 }}
