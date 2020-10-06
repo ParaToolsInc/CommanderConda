@@ -23,7 +23,7 @@ chmod +x "$INSTALLER_PATH"
 echo "***** Setup conda *****"
 set +o nounset
 # set +o verbose
-#shellcheck disable=SC1090
+#shellcheck disable=SC1090,SC1091
 source "${CONDA_PATH}/bin/activate"
 # set -o verbose
 set -o nounset
