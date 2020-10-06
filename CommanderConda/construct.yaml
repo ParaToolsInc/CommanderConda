@@ -1,8 +1,7 @@
-{% set name = os.environ.get("COMMANDERCONDA_NAME", "CommanderConda2") %}
 {% set version = os.environ.get("COMMANDERCONDA_VERSION", "4.8.5-0") %}
 
 
-name: {{ name }}
+name: CommanderConda3
 version: {{ version }}
 
 
@@ -17,8 +16,8 @@ channels:
   - http://repo.anaconda.com/pkgs/main
 
 conda_default_channels:
-  - conda-forge                                  # [not (osx and arm64)]
-  - https://conda-web.anaconda.org/conda-forge   # [osx and arm64]
+  - conda-forge                              # [not (osx and arm64)]
+  - https://conda.anaconda.org/conda-forge   # [osx and arm64]
   - https://conda.anaconda.org/plotly
   - http://repo.anaconda.com/pkgs/main
 
@@ -28,17 +27,12 @@ specs:
   - fasteners
   - ipykernel
   - ipywidgets 7.5
+  - jupyterlab
   - monotonic
   - nodejs
   - pip
-  - plotly 4.7.1
-{% if name == "CommanderConda3" %}
-  - jupyterlab
+  - plotly 4.11.0
   - python 3.7.*
-{% elif name == "CommanderConda2" %}
-  - python 2.7*
-  - six
-{% endif %}
   - setuptools
   - termcolor
   - texttable

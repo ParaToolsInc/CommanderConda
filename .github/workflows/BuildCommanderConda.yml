@@ -20,7 +20,7 @@ env:
 
 jobs:
   build:
-    name: py${{ matrix.python }}-${{ matrix.arch }}-${{ matrix.os }}
+    name: py3-${{ matrix.arch }}-${{ matrix.os }}
     runs-on: ${{ matrix.os }}
     defaults:
       run:
@@ -29,7 +29,6 @@ jobs:
       fail-fast: false
       matrix:
         os: [ubuntu-latest, macos-latest]
-        python: [3]
         arch: [x86_64, aarch64, ppc64le]
     outputs:
       checksum1: ${{ steps.cksums.outputs.out-0 }}
@@ -39,7 +38,7 @@ jobs:
       checksum5: ${{ steps.cksums.outputs.out-4 }}
       checksum6: ${{ steps.cksums.outputs.out-5 }}
     env:
-      COMMANDERCONDA_NAME: CommanderConda${{ matrix.python }}
+      COMMANDERCONDA_NAME: CommanderConda3
       ARCH: ${{ matrix.arch }}
     steps:
       - uses: actions/checkout@v2
