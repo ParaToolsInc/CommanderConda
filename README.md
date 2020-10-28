@@ -36,11 +36,11 @@ To create a new release please follow these steps:
 
 | Arch-OS \ Python Version | 2.7 | 3.7 |
 | --------------------: | :--: | :--: |
-| x86_64 Linux | Supported, implemented, deprecated | Supported |
-| x86_64 macOS | Supported, implemented, deprecated | Supported |
-| x86_64 Windows | Unsupported, deprecated | Unsupported |
-| aarch64 Linux | Unsupported | Supported |
-| ppc64le Linux | Unsupported | Supported |
+| x86_64 Linux | Unsupported, deprecated | Supported, Implemented |
+| x86_64 macOS | Unsupported, deprecated | Supported, Implemented |
+| x86_64 Windows | Unsupported | Unsupported |
+| aarch64 Linux | Unsupported | Supported, Implemented |
+| ppc64le Linux | Unsupported | Supported, Implemented |
 
 ## Acknowledgements
 
