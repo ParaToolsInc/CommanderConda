@@ -24,16 +24,18 @@ conda_default_channels:
 specs:
   - bzip2
   - conda {{ version.split("-")[0] }}
+  - dash 1.19
   - fasteners
   - ipykernel
-  - ipywidgets 7.5
-  - jupyterlab
+  - ipywidgets 7.6
+  - jupyter-dash 0.4
+  - jupyterlab 3.0
   - monotonic
   - nodejs
   - pandas
   - pip
-  - plotly 4.11.0
-  - python 3.7.*
+  - plotly 4.13
+  - python 3.7
   - setuptools
   - termcolor
   - texttable
