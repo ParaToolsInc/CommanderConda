@@ -30,6 +30,7 @@ specs:
   - ipywidgets 7.6.*
   - jupyter-dash 0.4.*
   - jupyterlab 3.0.*
+  - matplotlib
   - monotonic
   - nodejs
   - pandas
@@ -37,6 +38,7 @@ specs:
   - plotly 4.13.*
   - python 3.7.*
   - setuptools
+  - statsmodels
   - termcolor
   - texttable
   - tinydb
