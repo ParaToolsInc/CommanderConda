@@ -27,15 +27,15 @@ specs:
   - dash 1.19
   - fasteners
   - ipykernel
-  - ipywidgets 7.6
-  - jupyter-dash 0.4
-  - jupyterlab 3.0
+  - ipywidgets 7.6.*
+  - jupyter-dash 0.4.*
+  - jupyterlab 3.0.*
   - monotonic
   - nodejs
   - pandas
   - pip
-  - plotly 4.13
-  - python 3.7
+  - plotly 4.13.*
+  - python 3.7.*
   - setuptools
   - termcolor
   - texttable
@@ -45,7 +45,7 @@ specs:
 
 initialize_by_default: False
 
-install_in_dependency_order: False
+install_in_dependency_order: True
 
 # installer_type: pkg    [osx]
 
