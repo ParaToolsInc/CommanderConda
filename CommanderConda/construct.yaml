@@ -51,6 +51,8 @@ install_in_dependency_order: False
 
 # installer_type: pkg    [osx]
 
+keep_pkgs: True
+
 license_file: ../LICENSE
 
 register_python_default: False    [win]
