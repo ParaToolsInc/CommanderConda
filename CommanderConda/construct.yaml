@@ -47,9 +47,11 @@ specs:
 
 initialize_by_default: False
 
-install_in_dependency_order: True
+install_in_dependency_order: False
 
 # installer_type: pkg    [osx]
+
+keep_pkgs: True
 
 license_file: ../LICENSE
 
