@@ -28,7 +28,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest]
+        os: [ubuntu-18.04]
         arch: [x86_64, aarch64, ppc64le]
         include:
           - os: macos-latest
@@ -107,7 +107,7 @@ jobs:
           path: build/CommanderConda*.sh*
 
   deploy:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-18.04
     needs: build
     steps:
       - uses: actions/checkout@v2
