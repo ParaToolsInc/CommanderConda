@@ -25,6 +25,7 @@ specs:
   - bzip2
   - conda {{ version.split("-")[0] }}
   - dash 1.19
+  - dash-bootstrap-components
   - fasteners
   - ipykernel
   - ipywidgets 7.6.*
