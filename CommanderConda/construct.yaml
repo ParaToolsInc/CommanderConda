@@ -30,7 +30,7 @@ specs:
   - ipykernel
   - ipywidgets >=7.6.5 
   - jupyter-dash >=0.4.1
-  - jupyterlab >=3.2.9 
+  - jupyterlab 3.2.9 
   - matplotlib
   - monotonic
   - nodejs
