@@ -14,8 +14,12 @@ cd "$CONSTRUCT_ROOT"
 # Constructor should be latest for non-native building
 # See https://github.com/conda/constructor
 echo "***** Install constructor *****"
-conda install -y "constructor>=3.1.0" "pyyaml<6" jinja2
-pip install git+git://github.com/conda/constructor@926707a34def8cb51be640b98842180260e7fa0a#egg=constructor --force --no-deps
+conda install -y "constructor>=3.3.1" jinja2 curl libarchive -c conda-forge --override-channels
+
+if [[ "$(uname)" == "Darwin" ]]; then
+    conda install -y coreutils -c conda-forge --override-channels
+fi
+
 conda list
 
 echo "***** Make temp directory *****"
