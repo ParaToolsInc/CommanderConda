@@ -1,4 +1,4 @@
-{% set version = os.environ.get("COMMANDERCONDA_VERSION", "4.10.1-0") %}
+{% set version = os.environ.get("COMMANDERCONDA_VERSION", "4.12.0-0") %}
 
 
 name: CommanderConda3
@@ -24,13 +24,13 @@ conda_default_channels:
 specs:
   - bzip2
   - conda {{ version.split("-")[0] }}
-  - dash >=2.0.0 
-  - dash-bootstrap-components >=1.0.3 
+  - dash >=2.0.0
+  - dash-bootstrap-components >=1.0.3
   - fasteners
   - ipykernel
-  - ipywidgets >=7.6.5 
+  - ipywidgets >=7.6.5
   - jupyter-dash >=0.4.1
-  - jupyterlab 3.2.9 
+  - jupyterlab 3.2.9
   - matplotlib
   - monotonic
   - nodejs
