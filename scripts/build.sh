@@ -23,11 +23,7 @@ fi
 conda list
 
 echo "***** Make temp directory *****"
-if [[ "$(uname)" == MINGW* ]]; then
-   TEMP_DIR=$(mktemp -d --tmpdir=C:/Users/RUNNER~1/AppData/Local/Temp/);
-else
-   TEMP_DIR=$(mktemp -d);
-fi
+TEMP_DIR=$(mktemp -d);
 
 echo "***** Copy file for installer construction *****"
 cp -R CommanderConda "${TEMP_DIR}/"
@@ -36,7 +32,7 @@ cp LICENSE "${TEMP_DIR}/"
 ls -al "${TEMP_DIR}"
 
 echo "***** Construct the installer *****"
-constructor "$TEMP_DIR/CommanderConda/" --output-dir "$TEMP_DIR"
+constructor "$TEMP_DIR/CommanderConda/" --output-dir "$TEMP_DIR" # --platform "${TARGET_PLATFORM}"
 
 echo "***** Generate installer hash *****"
 cd "$TEMP_DIR"

@@ -14,9 +14,8 @@ on:
 
 env:
   QEMU_STATIC_VERSION: "v3.1.0-3"
-  MINIFORGE_URL: "https://github.com/conda-forge/miniforge/releases/download/4.8.5-1"
-  MINIFORGE_FILE: "Miniforge3-4.8.5-1-MacOSX-x86_64.sh"
-  MINIFORGE_SHA256: "5054599ee6ea639209b831d859935da50229040d7993b1736358734d1e9c5edc"
+  MINIFORGE_VERSION: "4.10.3-10" # needs to be updated in matrix section too--fix this.
+  MINIFORGE_URL: "https://github.com/conda-forge/miniforge/releases/download"
 
 jobs:
   build:
@@ -33,6 +32,13 @@ jobs:
         include:
           - os: macos-latest
             arch: x86_64
+            MINIFORGE_FILE: "Miniforge3-4.10.3-10-MacOSX-x86_64.sh"
+            MINIFORGE_SHA256: "7d325a5370664ec2fe1c09c3066c22fd905431f338c7eed31ad7e14c7ce4bd83"
+          - os: macos-latest
+            arch: arm64
+            MINIFORGE_FILE: "Miniforge3-4.10.3-10-MacOSX-arm64.sh"
+            MINIFORGE_SHA256: "bd4d59ead779a6e2d9af69fd8cdcaac8e1446191c59ab446ae8547a1aecd75b7"
+
     outputs:
       checksum1: ${{ steps.cksums.outputs.out-0 }}
       checksum2: ${{ steps.cksums.outputs.out-1 }}
@@ -68,20 +74,25 @@ jobs:
         if: runner.os == 'macOS'
         with:
           path: build/miniforge
-          key: miniforge-${{ env.MINIFORGE_SHA256 }}-${{ hashFiles('.github/workflows/BuildCommanderConda.yml') }}
+          key: miniforge-${{ matrix.MINIFORGE_SHA256 }}-${{ hashFiles('.github/workflows/BuildCommanderConda.yml') }}
       - name: get miniforge
         if: steps.cache-miniforge.outputs.cache-hit != 'true' && runner.os == 'macOS'
         run: |
           mkdir -p ./build/miniforge || true
           cd ./build/miniforge
-          curl -L -O "${MINIFORGE_URL}/${MINIFORGE_FILE}"
+          echo "curl -L -s \"${MINIFORGE_URL}/${MINIFORGE_VERSION}/${{ matrix.MINIFORGE_FILE }}\" > \"${{ matrix.MINIFORGE_FILE }}\""
+          curl -L -s "${MINIFORGE_URL}/${MINIFORGE_VERSION}/${{ matrix.MINIFORGE_FILE }}" > "${{ matrix.MINIFORGE_FILE }}"
       - name: verify minforge checksum
         if: runner.os == 'macOS'
         working-directory: build/miniforge
+        env:
+          MINIFORGE_FILE: ${{ matrix.MINIFORGE_FILE }}
         run: |
-          echo "${MINIFORGE_SHA256} *${MINIFORGE_FILE}" | tee ${MINIFORGE_FILE}.sha256
+          echo "${{ matrix.MINIFORGE_SHA256 }} *${MINIFORGE_FILE}" | tee ${MINIFORGE_FILE}.sha256
           shasum -c ./${MINIFORGE_FILE}.sha256
       - name: Build and test CommanderConda
+        env:
+          MINIFORGE_FILE: ${{ matrix.MINIFORGE_FILE }}
         run: ./build_CommanderConda_${{ runner.os }}.sh
       - name: Checksum Outputs
         id: cksums
