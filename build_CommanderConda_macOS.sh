@@ -7,13 +7,13 @@ set -o nounset
 
 echo "Installing Miniforge3."
 chmod +x "build/miniforge/${MINIFORGE_FILE}"
-./build/miniforge/"${MINIFORGE_FILE}" -b
-
-echo "Configuring conda."
 
 set +o nounset
 # set +o verbose
-bash miniconda.sh -b -p ~/conda
+
+bash "${MINIFORGE_FILE}" -b -p ~/conda
+
+echo "Configuring conda."
 #shellcheck disable=SC1090
 source ~/conda/bin/activate root
 # set -o verbose
