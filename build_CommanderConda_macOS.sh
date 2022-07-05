@@ -6,26 +6,51 @@ set -o pipefail
 set -o nounset
 
 echo "Installing Miniforge3."
-chmod +x "build/miniforge/${MINIFORGE_FILE}"
-./build/miniforge/"${MINIFORGE_FILE}" -b
+chmod +x "${MINIFORGE_FILE}"
 
-echo "Configuring conda."
+echo "Shell: ${SHELL}"
+echo "Shell arch info:"
 
+lipo -info "${SHELL}"
+file "${SHELL}"
+
+echo "Working directory:"
+pwd
+
+ls -la
+ls -la build
+ls -la build/miniforge
+
+echo "\$MINIFORGE_FILE = ${MINIFORGE_FILE}"
+
+set +o errexit
 set +o nounset
 # set +o verbose
+
+lipo -info "$(which bash)"
+file "$(which bash)"
+
+arch -"$(uname -m)" bash "${MINIFORGE_FILE}" -b -p ~/conda
+
+echo "Configuring conda."
 #shellcheck disable=SC1090
-source ~/miniforge3/bin/activate root
+source ~/conda/bin/activate root
 # set -o verbose
 set -o nounset
+set -o errexit
 
 CONSTRUCT_ROOT="$(pwd)"
 export CONSTRUCT_ROOT
+export TARGET_PLATFORM
 
 echo "============= Create build directory ============="
 mkdir -p build/ || true
 chmod 777 build/
 
 echo "============= Build the installer ============="
+ls -al ~/conda/bin
+type -a constructor
+
 ./scripts/build.sh
 
 echo "============= Test the installer ============="
