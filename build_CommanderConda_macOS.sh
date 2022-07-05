@@ -30,7 +30,7 @@ set +o nounset
 lipo -info "$(which bash)"
 file "$(which bash)"
 
-bash "${MINIFORGE_FILE}" -b -p ~/conda
+arch -"$(uname -m)" bash "${MINIFORGE_FILE}" -b -p ~/conda
 
 echo "Configuring conda."
 #shellcheck disable=SC1090
