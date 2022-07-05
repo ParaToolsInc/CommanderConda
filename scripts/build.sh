@@ -31,8 +31,17 @@ cp LICENSE "${TEMP_DIR}/"
 
 ls -al "${TEMP_DIR}"
 
+MICROMAMBA_VERSION=0.23.0
+mkdir "${TEMP_DIR}/micromamba"
+pushd "${TEMP_DIR}/micromamba"
+curl -L -O "https://anaconda.org/conda-forge/micromamba/${MICROMAMBA_VERSION}/download/${TARGET_PLATFORM}/micromamba-${MICROMAMBA_VERSION}-0.tar.bz2"
+bsdtar -xf "micromamba-${MICROMAMBA_VERSION}-0.tar.bz2"
+MICROMAMBA_FILE="${PWD}/bin/micromamba"
+popd
+EXTRA_CONSTRUCTOR_ARGS+=(--conda-exe "${MICROMAMBA_FILE}" --platform "${TARGET_PLATFORM}")
+
 echo "***** Construct the installer *****"
-constructor "$TEMP_DIR/CommanderConda/" --output-dir "$TEMP_DIR" # --platform "${TARGET_PLATFORM}"
+constructor "$TEMP_DIR/CommanderConda/" --output-dir "$TEMP_DIR" "${EXTRA_CONSTRUCTOR_ARGS[@]}"
 
 echo "***** Generate installer hash *****"
 cd "$TEMP_DIR"
