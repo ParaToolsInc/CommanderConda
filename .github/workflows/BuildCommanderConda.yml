@@ -32,12 +32,12 @@ jobs:
         include:
           - os: macos-latest
             arch: x86_64
-            MINIFORGE_FILE: "Miniforge3-4.10.3-10-MacOSX-x86_64.sh"
-            MINIFORGE_SHA256: "7d325a5370664ec2fe1c09c3066c22fd905431f338c7eed31ad7e14c7ce4bd83"
+            MINIFORGE_FILE: "Mambaforge-4.10.3-10-MacOSX-x86_64.sh"
+            MINIFORGE_SHA256: "7c44259a0982cd3ef212649678af5f0dd4e0bb7306e8fffc93601dd1d739ec0b"
           - os: macos-latest
             arch: arm64
-            MINIFORGE_FILE: "Miniforge3-4.10.3-10-MacOSX-arm64.sh"
-            MINIFORGE_SHA256: "bd4d59ead779a6e2d9af69fd8cdcaac8e1446191c59ab446ae8547a1aecd75b7"
+            MINIFORGE_FILE: "Mambaforge-4.10.3-10-MacOSX-arm64.sh"
+            MINIFORGE_SHA256: "72bc86612ab9435915b616c2edb076737cbabe2c33fd684d58c2f9ae72e1957c"
 
     outputs:
       checksum1: ${{ steps.cksums.outputs.out-0 }}

@@ -13,8 +13,9 @@ echo "Configuring conda."
 
 set +o nounset
 # set +o verbose
+bash miniconda.sh -b -p ~/conda
 #shellcheck disable=SC1090
-source ~/miniforge3/bin/activate root
+source ~/conda/bin/activate root
 # set -o verbose
 set -o nounset
 
