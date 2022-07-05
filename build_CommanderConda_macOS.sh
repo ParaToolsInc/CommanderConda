@@ -48,6 +48,9 @@ mkdir -p build/ || true
 chmod 777 build/
 
 echo "============= Build the installer ============="
+ls -al ~/conda/bin
+type -a constructor
+
 ./scripts/build.sh
 
 echo "============= Test the installer ============="
