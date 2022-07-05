@@ -11,6 +11,11 @@ chmod +x "build/miniforge/${MINIFORGE_FILE}"
 set +o nounset
 # set +o verbose
 
+echo "Working directory:"
+pwd
+
+ls -la
+
 bash "${MINIFORGE_FILE}" -b -p ~/conda
 
 echo "Configuring conda."
