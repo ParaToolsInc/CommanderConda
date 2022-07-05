@@ -8,8 +8,11 @@ set -o nounset
 echo "Installing Miniforge3."
 chmod +x "${MINIFORGE_FILE}"
 
-set +o nounset
-# set +o verbose
+echo "Shell: ${SHELL}"
+echo "Shell arch info:"
+
+lipo -info "${SHELL}"
+file "${SHELL}"
 
 echo "Working directory:"
 pwd
@@ -20,6 +23,13 @@ ls -la build/miniforge
 
 echo "\$MINIFORGE_FILE = ${MINIFORGE_FILE}"
 
+set +o errexit
+set +o nounset
+# set +o verbose
+
+lipo -info "$(which bash)"
+file "$(which bash)"
+
 bash "${MINIFORGE_FILE}" -b -p ~/conda
 
 echo "Configuring conda."
@@ -27,6 +37,7 @@ echo "Configuring conda."
 source ~/conda/bin/activate root
 # set -o verbose
 set -o nounset
+set -o errexit
 
 CONSTRUCT_ROOT="$(pwd)"
 export CONSTRUCT_ROOT
