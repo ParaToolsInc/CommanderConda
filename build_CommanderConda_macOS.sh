@@ -41,6 +41,7 @@ set -o errexit
 
 CONSTRUCT_ROOT="$(pwd)"
 export CONSTRUCT_ROOT
+export TARGET_PLATFORM
 
 echo "============= Create build directory ============="
 mkdir -p build/ || true

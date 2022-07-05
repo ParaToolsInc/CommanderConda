@@ -100,9 +100,10 @@ jobs:
         run: |
           if [[ "${{ runner.os }}" == Linux ]] ; then
             if [[ "$ARCH" != x86_64 ]] ; then
-              export TARGET_PLATFORM="linux-$ARCH"
+              TARGET_PLATFORM="linux-$ARCH"
             fi
           fi
+          export TARGET_PLATFORM
           echo "Target arch: ${TARGET_PLATFORM}"
           ./build_CommanderConda_${{ runner.os }}.sh
       - name: Checksum Outputs
