@@ -14,7 +14,7 @@ on:
 
 env:
   QEMU_STATIC_VERSION: "v3.1.0-3"
-  MINIFORGE_VERSION: "4.10.3-10" # needs to be updated in matrix section too--fix this.
+  MINIFORGE_VERSION: "4.12.0-2" # needs to be updated in matrix section too--fix this.
   MINIFORGE_URL: "https://github.com/conda-forge/miniforge/releases/download"
 
 jobs:
@@ -32,11 +32,11 @@ jobs:
         include:
           - os: macos-latest
             arch: x86_64
-            MINIFORGE_FILE: "Mambaforge-4.10.3-10-MacOSX-x86_64.sh"
+            MINIFORGE_FILE: "Mambaforge-4.12.0-2-MacOSX-x86_64.sh"
             MINIFORGE_SHA256: "7c44259a0982cd3ef212649678af5f0dd4e0bb7306e8fffc93601dd1d739ec0b"
           - os: macos-latest
             arch: arm64
-            MINIFORGE_FILE: "Mambaforge-4.10.3-10-MacOSX-arm64.sh"
+            MINIFORGE_FILE: "Mambaforge-4.12.0-2-MacOSX-arm64.sh"
             MINIFORGE_SHA256: "72bc86612ab9435915b616c2edb076737cbabe2c33fd684d58c2f9ae72e1957c"
 
     outputs:
