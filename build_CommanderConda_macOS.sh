@@ -6,7 +6,7 @@ set -o pipefail
 set -o nounset
 
 echo "Installing Miniforge3."
-chmod +x "build/miniforge/${MINIFORGE_FILE}"
+chmod +x "${MINIFORGE_FILE}"
 
 set +o nounset
 # set +o verbose
@@ -15,6 +15,10 @@ echo "Working directory:"
 pwd
 
 ls -la
+ls -la build
+ls -la build/miniforge
+
+echo "\$MINIFORGE_FILE = ${MINIFORGE_FILE}"
 
 bash "${MINIFORGE_FILE}" -b -p ~/conda
 

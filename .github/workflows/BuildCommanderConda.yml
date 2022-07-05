@@ -92,7 +92,7 @@ jobs:
           shasum -c ./${MINIFORGE_FILE}.sha256
       - name: Build and test CommanderConda
         env:
-          MINIFORGE_FILE: ${{ matrix.MINIFORGE_FILE }}
+          MINIFORGE_FILE: build/miniforge/${{ matrix.MINIFORGE_FILE }}
         run: ./build_CommanderConda_${{ runner.os }}.sh
       - name: Checksum Outputs
         id: cksums
