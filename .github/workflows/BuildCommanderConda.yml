@@ -29,6 +29,7 @@ jobs:
       matrix:
         os: [ubuntu-18.04]
         arch: [x86_64, aarch64, ppc64le]
+        TARGET_PLATFORM: [linux-64]
         include:
           - os: macos-latest
             arch: x86_64
@@ -51,7 +52,7 @@ jobs:
     env:
       COMMANDERCONDA_NAME: CommanderConda3
       ARCH: ${{ matrix.arch }}
-      TARGET_PLATFORM: "linux-64"
+      TARGET_PLATFORM: ${{ matrix.TARGET_PLATFORM }}
     steps:
       - uses: actions/checkout@v2
       - uses: actions/cache@v1
@@ -97,9 +98,10 @@ jobs:
         env:
           MINIFORGE_FILE: build/miniforge/${{ matrix.MINIFORGE_FILE }}
         run: |
-          [[ -n "${{ matrix.TARGET_PLATFORM }}" ]] && export TARGET_PLATFORM="${{ matrix.TARGET_PLATFORM }}"
-          if [[ "${{ runner.os }}" == Linux && "$ARCH" /= x86_64 ]] ; then
-            export TARGET_PLATFORM="linux-$ARCH"
+          if [[ "${{ runner.os }}" == Linux ]] ; then
+            if [[ "$ARCH" != x86_64 ]] ; then
+              export TARGET_PLATFORM="linux-$ARCH"
+            fi
           fi
           echo "Target arch: ${TARGET_PLATFORM}"
           ./build_CommanderConda_${{ runner.os }}.sh
