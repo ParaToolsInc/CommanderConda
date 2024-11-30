@@ -14,9 +14,8 @@ on:
 
 env:
   QEMU_STATIC_VERSION: "v3.1.0-3"
-  MINIFORGE_URL: "https://github.com/conda-forge/miniforge/releases/download/4.8.5-1"
-  MINIFORGE_FILE: "Miniforge3-4.8.5-1-MacOSX-x86_64.sh"
-  MINIFORGE_SHA256: "5054599ee6ea639209b831d859935da50229040d7993b1736358734d1e9c5edc"
+  MINIFORGE_VERSION: "4.12.0-2" # needs to be updated in matrix section too--fix this.
+  MINIFORGE_URL: "https://github.com/conda-forge/miniforge/releases/download"
 
 jobs:
   build:
@@ -30,9 +29,19 @@ jobs:
       matrix:
         os: [ubuntu-18.04]
         arch: [x86_64, aarch64, ppc64le]
+        TARGET_PLATFORM: [linux-64]
         include:
           - os: macos-latest
             arch: x86_64
+            MINIFORGE_FILE: "Mambaforge-4.12.0-2-MacOSX-x86_64.sh"
+            MINIFORGE_SHA256: "562c2bcbabff10387f130acea72b960454fa3d90b593126e4e4febcf6da763d3"
+            TARGET_PLATFORM: osx-64
+          - os: macos-latest
+            arch: arm64
+            MINIFORGE_FILE: "Mambaforge-4.12.0-2-MacOSX-arm64.sh"
+            MINIFORGE_SHA256: "2e2be9d976da31b62ab314881d3c6ed3f65c76e3ea69cc4b59fb344780109026"
+            TARGET_PLATFORM: osx-arm64
+
     outputs:
       checksum1: ${{ steps.cksums.outputs.out-0 }}
       checksum2: ${{ steps.cksums.outputs.out-1 }}
@@ -43,6 +52,7 @@ jobs:
     env:
       COMMANDERCONDA_NAME: CommanderConda3
       ARCH: ${{ matrix.arch }}
+      TARGET_PLATFORM: ${{ matrix.TARGET_PLATFORM }}
     steps:
       - uses: actions/checkout@v2
       - uses: actions/cache@v1
@@ -68,21 +78,34 @@ jobs:
         if: runner.os == 'macOS'
         with:
           path: build/miniforge
-          key: miniforge-${{ env.MINIFORGE_SHA256 }}-${{ hashFiles('.github/workflows/BuildCommanderConda.yml') }}
+          key: miniforge-${{ matrix.MINIFORGE_SHA256 }}-${{ hashFiles('.github/workflows/BuildCommanderConda.yml') }}
       - name: get miniforge
         if: steps.cache-miniforge.outputs.cache-hit != 'true' && runner.os == 'macOS'
         run: |
           mkdir -p ./build/miniforge || true
           cd ./build/miniforge
-          curl -L -O "${MINIFORGE_URL}/${MINIFORGE_FILE}"
+          echo "curl -L -s \"${MINIFORGE_URL}/${MINIFORGE_VERSION}/${{ matrix.MINIFORGE_FILE }}\" > \"${{ matrix.MINIFORGE_FILE }}\""
+          curl -L -s "${MINIFORGE_URL}/${MINIFORGE_VERSION}/${{ matrix.MINIFORGE_FILE }}" > "${{ matrix.MINIFORGE_FILE }}"
       - name: verify minforge checksum
         if: runner.os == 'macOS'
         working-directory: build/miniforge
+        env:
+          MINIFORGE_FILE: ${{ matrix.MINIFORGE_FILE }}
         run: |
-          echo "${MINIFORGE_SHA256} *${MINIFORGE_FILE}" | tee ${MINIFORGE_FILE}.sha256
+          echo "${{ matrix.MINIFORGE_SHA256 }} *${MINIFORGE_FILE}" | tee ${MINIFORGE_FILE}.sha256
           shasum -c ./${MINIFORGE_FILE}.sha256
       - name: Build and test CommanderConda
-        run: ./build_CommanderConda_${{ runner.os }}.sh
+        env:
+          MINIFORGE_FILE: build/miniforge/${{ matrix.MINIFORGE_FILE }}
+        run: |
+          if [[ "${{ runner.os }}" == Linux ]] ; then
+            if [[ "$ARCH" != x86_64 ]] ; then
+              TARGET_PLATFORM="linux-$ARCH"
+            fi
+          fi
+          export TARGET_PLATFORM
+          echo "Target arch: ${TARGET_PLATFORM}"
+          ./build_CommanderConda_${{ runner.os }}.sh
       - name: Checksum Outputs
         id: cksums
         working-directory: build

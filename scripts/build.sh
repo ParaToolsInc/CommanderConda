@@ -23,11 +23,7 @@ fi
 conda list
 
 echo "***** Make temp directory *****"
-if [[ "$(uname)" == MINGW* ]]; then
-   TEMP_DIR=$(mktemp -d --tmpdir=C:/Users/RUNNER~1/AppData/Local/Temp/);
-else
-   TEMP_DIR=$(mktemp -d);
-fi
+TEMP_DIR=$(mktemp -d);
 
 echo "***** Copy file for installer construction *****"
 cp -R CommanderConda "${TEMP_DIR}/"
@@ -35,8 +31,17 @@ cp LICENSE "${TEMP_DIR}/"
 
 ls -al "${TEMP_DIR}"
 
+MICROMAMBA_VERSION=0.23.0
+mkdir "${TEMP_DIR}/micromamba"
+pushd "${TEMP_DIR}/micromamba"
+curl -L -O "https://anaconda.org/conda-forge/micromamba/${MICROMAMBA_VERSION}/download/${TARGET_PLATFORM}/micromamba-${MICROMAMBA_VERSION}-0.tar.bz2"
+bsdtar -xf "micromamba-${MICROMAMBA_VERSION}-0.tar.bz2"
+MICROMAMBA_FILE="${PWD}/bin/micromamba"
+popd
+EXTRA_CONSTRUCTOR_ARGS+=(--conda-exe "${MICROMAMBA_FILE}" --platform "${TARGET_PLATFORM}")
+
 echo "***** Construct the installer *****"
-constructor "$TEMP_DIR/CommanderConda/" --output-dir "$TEMP_DIR"
+constructor "$TEMP_DIR/CommanderConda/" --output-dir "$TEMP_DIR" "${EXTRA_CONSTRUCTOR_ARGS[@]}"
 
 echo "***** Generate installer hash *****"
 cd "$TEMP_DIR"
